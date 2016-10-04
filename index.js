@@ -8,7 +8,6 @@ const filter = 'for_ios';
 
 function fetchApi(url, options) {
   const finalUrl = BASE_URL + url;
-  //console.log(finalUrl);
   return fetch(finalUrl, options).then(res => {
     if (res.status === 200) {
       return res.json();
@@ -29,7 +28,6 @@ function serialize(obj) {
 
 class PixivApi {
   constructor(username, password) {
-    //this.baseUrl = 'https://app-api.pixiv.net';
     this.username = username;
     this.password = password;
   }
@@ -188,16 +186,17 @@ class PixivApi {
 
   illustRecommended(query) {
     query = qs.stringify(Object.assign({
-      //content_type: 'illust',
+      content_type: 'illust',
       include_ranking_label: 'true',
       filter
     }, query));
     return this.fetchUrl(`/v1/illust/recommended?${query}`);
   }
 
+  //require auth
   illustRanking(query) {
     query = qs.stringify(Object.assign({
-      mode: 'day', //day_male, day_female, week_original, week_rookie, week, month
+      mode: 'day',
       filter
     }, query));
     return this.fetchUrl(`/v1/illust/ranking?${query}`);
@@ -243,7 +242,6 @@ class PixivApi {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': serialize(body).length
       },
       body: serialize(body)
     }
@@ -274,7 +272,7 @@ class PixivApi {
     options = options || {};
     options.headers = Object.assign({
       'App-OS': 'ios',
-      'Accept-Language': 'en-us',
+      // 'Accept-Language': 'en-us',
       'App-OS-Version': '9.3.3',
       'App-Version': '6.1.2',
       'User-Agent': 'PixivIOSApp/6.1.2 (iOS 9.0; iPhone8,2)',
