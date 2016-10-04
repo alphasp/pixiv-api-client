@@ -1,4 +1,7 @@
-const { fetch } = require('fetch-ponyfill')();
+'use strict'
+
+const fetchPonyfill = require('fetch-ponyfill')();
+const fetch = fetchPonyfill.fetch;
 const qs = require('qs');
 const BASE_URL = 'https://app-api.pixiv.net';
 const filter = 'for_ios';
@@ -264,10 +267,11 @@ class PixivApi {
     return this.fetchUrl(`/v1/novel/recommended?${query}`);
   }
 
-  fetchUrl(url, options = {}) {
+  fetchUrl(url, options) {
     if (!url) {
       return Promise.reject("Url cannot be empty");
     }
+    options = options || {};
     options.headers = Object.assign({
       'App-OS': 'ios',
       'Accept-Language': 'en-us',
