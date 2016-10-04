@@ -1,4 +1,4 @@
-> Promise based Pixiv API client for browser or node.js
+> Promise based Pixiv API client for browser, react native and node.js
 
 Documentation WIP
 
