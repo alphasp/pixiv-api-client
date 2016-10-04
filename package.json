@@ -1,0 +1,35 @@
+{
+  "name": "pixiv-api",
+  "version": "0.1.0",
+  "description": "Promise based Pixiv API client for browser, react native and node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava --verbose"
+  },
+ "author": {
+    "name": "alphasp",
+    "email": "gmerudotcom@gmail.com",
+    "url": "https://twitter.com/alphak87"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=4"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "pixiv",
+    "pixiv-api",
+    "pixiv-api-client",
+    "api-client"
+  ],
+  "dependencies": {
+    "fetch-ponyfill": "^3.0.1",
+    "qs": "^6.2.1"
+  },
+  "devDependencies": {
+    "ava": "^0.16.0",
+    "lodash.isobject": "^3.0.2"
+  }
+}
