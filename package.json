@@ -1,12 +1,12 @@
 {
   "name": "pixiv-api-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Promise based Pixiv API client for browser, react native and node.js",
   "main": "index.js",
   "scripts": {
     "test": "ava --verbose"
   },
- "author": {
+  "author": {
     "name": "alphasp",
     "email": "gmerudotcom@gmail.com",
     "url": "https://twitter.com/alphak87"
