@@ -1,6 +1,7 @@
 'use strict'
 
-const fetchPonyfill = require('fetch-ponyfill')();
+const PromisePolyfill = require('es6-promise').Promise;
+const fetchPonyfill = require('fetch-ponyfill')({ Promise: Promise || PromisePolyfill });
 const fetch = fetchPonyfill.fetch;
 const qs = require('qs');
 const BASE_URL = 'https://app-api.pixiv.net';
@@ -14,9 +15,7 @@ function fetchApi(url, options) {
     }
     else {
       return res.json().then(err => {
-        var error = new Error(err.error || err);
-        error.status = res.status;
-        throw error;  
+        throw err;
       })
     }
   });
@@ -54,16 +53,7 @@ class PixivApi {
       }
       else {
         return res.json().then(err => {
-          let error; 
-          if (err && err.errors && err.errors.system && err.errors.system.message) {
-            error = new Error(err.errors.system.message);
-          }
-          else {
-            error = new Error(err);
-          }
-
-          error.status = res.status;
-          throw error;  
+          throw err;
         })
       }
     }).then(json => {

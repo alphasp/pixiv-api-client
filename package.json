@@ -11,6 +11,7 @@
     "email": "gmerudotcom@gmail.com",
     "url": "https://twitter.com/alphak87"
   },
+  "repository": "alphasp/pixiv-api-client",
   "license": "MIT",
   "engines": {
     "node": ">=4"
@@ -25,6 +26,7 @@
     "api-client"
   ],
   "dependencies": {
+    "es6-promise": "^4.0.5",
     "fetch-ponyfill": "^3.0.1",
     "qs": "^6.2.1"
   },
