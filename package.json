@@ -1,10 +1,10 @@
 {
   "name": "pixiv-api-client",
   "version": "0.4.0",
-  "description": "Promise based Pixiv API client for browser, react native and node.js",
+  "description": "Promise based Pixiv API client for react native and node.js",
   "main": "index.js",
   "scripts": {
-    "test": "ava --verbose"
+    "test": "ava"
   },
   "author": {
     "name": "alphasp",
@@ -26,8 +26,7 @@
     "api-client"
   ],
   "dependencies": {
-    "es6-promise": "^4.0.5",
-    "fetch-ponyfill": "^3.0.1",
+    "axios": "^0.14.0",
     "qs": "^6.2.1"
   },
   "devDependencies": {

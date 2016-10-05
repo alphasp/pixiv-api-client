@@ -1,22 +1,20 @@
 'use strict'
 
-const PromisePolyfill = require('es6-promise').Promise;
-const fetchPonyfill = require('fetch-ponyfill')({ Promise: Promise || PromisePolyfill });
-const fetch = fetchPonyfill.fetch;
+const axios = require('axios');
 const qs = require('qs');
 const BASE_URL = 'https://app-api.pixiv.net';
 const filter = 'for_ios';
 
-function fetchApi(url, options) {
+function callApi(url, options) {
   const finalUrl = BASE_URL + url;
-  return fetch(finalUrl, options).then(res => {
-    if (res.status === 200) {
-      return res.json();
+  return axios(finalUrl, options).then(res => {
+    return res.data;
+  }).catch(err => {
+    if (err.response) {
+      throw err.response.data;
     }
     else {
-      return res.json().then(err => {
-        throw err;
-      })
+      throw err.message;
     }
   });
 }
@@ -31,7 +29,7 @@ class PixivApi {
     this.password = password;
   }
   login() {
-    const body = {
+    const data = {
       client_id: 'bYGKuGVw91e0NMfPGp44euvGt59s',
       client_secret: 'HP3RmkgAmEGro0gn1x9ioawQE8WMfvLXDz3ZqxpK',
       get_secure_url: 1,
@@ -45,20 +43,28 @@ class PixivApi {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: serialize(body)
+      data: serialize(data)
     }
-    return fetch('https://oauth.secure.pixiv.net/auth/token', options).then(res => {
+    return axios('https://oauth.secure.pixiv.net/auth/token', options).then(res => {
       if (res.status === 200) {
-        return res.json();
+        return res.data;
       }
       else {
-        return res.json().then(err => {
-          throw err;
-        })
+        // return res.data().then(err => {
+        //   throw err;
+        // })
+        throw res.data
       }
     }).then(json => {
       this.auth = json.response;
       return json;
+    }).catch(err => {
+      if (err.response) {
+        throw err.response.data;
+      }
+      else {
+        throw err.message;
+      }
     });
   }
 
@@ -77,7 +83,7 @@ class PixivApi {
       sort: 'date_desc',
       filter: 'for_ios'
     }, query));
-    return this.fetchUrl(`/v1/search/illust?${query}`);
+    return this.requestUrl(`/v1/search/illust?${query}`);
   }
 
   userDetail(id, query) {
@@ -89,7 +95,7 @@ class PixivApi {
       user_id: id,
       filter
     }, query));
-    return this.fetchUrl(`/v1/user/detail?${query}`);
+    return this.requestUrl(`/v1/user/detail?${query}`);
   }
 
   userIllusts(id, query) {
@@ -102,7 +108,7 @@ class PixivApi {
       type: 'illust',
       filter
     }, query));
-    return this.fetchUrl(`/v1/user/illusts?${query}`);
+    return this.requestUrl(`/v1/user/illusts?${query}`);
   }
 
   userBookmarksIllust(id, query) {
@@ -115,7 +121,7 @@ class PixivApi {
       restrict: 'public',
       filter
     }, query));
-    return this.fetchUrl(`/v1/user/bookmarks/illust?${query}`);
+    return this.requestUrl(`/v1/user/bookmarks/illust?${query}`);
   }
 
   //require auth
@@ -127,7 +133,7 @@ class PixivApi {
     query = qs.stringify(Object.assign({
       illust_id: id
     }, query));
-    return this.fetchUrl(`/v2/illust/bookmark/detail?${query}`);
+    return this.requestUrl(`/v2/illust/bookmark/detail?${query}`);
   }
 
   illustComments(id, query) {
@@ -139,7 +145,7 @@ class PixivApi {
       illust_id: id,
       include_total_comments: 'true'
     }, query));
-    return this.fetchUrl(`/v1/illust/comments?${query}`);
+    return this.requestUrl(`/v1/illust/comments?${query}`);
   }
 
   illustRelated(id, query) {
@@ -151,7 +157,7 @@ class PixivApi {
       illust_id: id,
       filter
     }, query));
-    return this.fetchUrl(`/v1/illust/related?${query}`);
+    return this.requestUrl(`/v1/illust/related?${query}`);
   }
 
   illustDetail(id, query) {
@@ -163,7 +169,7 @@ class PixivApi {
       illust_id: id,
       filter
     }, query));
-    return this.fetchUrl(`/v1/illust/detail?${query}`);
+    return this.requestUrl(`/v1/illust/detail?${query}`);
   }
 
   //require auth
@@ -171,7 +177,7 @@ class PixivApi {
     query = qs.stringify(Object.assign({
       restrict: 'public'
     }, query));
-    return this.fetchUrl(`/v2/illust/follow?${query}`);
+    return this.requestUrl(`/v2/illust/follow?${query}`);
   }
 
   illustRecommended(query) {
@@ -180,7 +186,7 @@ class PixivApi {
       include_ranking_label: 'true',
       filter
     }, query));
-    return this.fetchUrl(`/v1/illust/recommended?${query}`);
+    return this.requestUrl(`/v1/illust/recommended?${query}`);
   }
 
   //require auth
@@ -189,14 +195,14 @@ class PixivApi {
       mode: 'day',
       filter
     }, query));
-    return this.fetchUrl(`/v1/illust/ranking?${query}`);
+    return this.requestUrl(`/v1/illust/ranking?${query}`);
   }
 
   trendingTagsIllust(query) {
     query = qs.stringify(Object.assign({
       filter
     }, query));
-    return this.fetchUrl(`/v1/trending-tags/illust?${query}`);
+    return this.requestUrl(`/v1/trending-tags/illust?${query}`);
   }
 
   //POST
@@ -204,7 +210,7 @@ class PixivApi {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
     }
-    const body = {
+    const data = {
       illust_id: id,
       restrict: 'public'
     };
@@ -214,9 +220,9 @@ class PixivApi {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: serialize(body)
+      data: serialize(data)
     }
-    return this.fetchUrl('/v1/illust/bookmark/add', options);
+    return this.requestUrl('/v1/illust/bookmark/add', options);
   }
 
   //POST  
@@ -224,7 +230,7 @@ class PixivApi {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
     }
-    const body = {
+    const data = {
       illust_id: id,
     };
     //
@@ -233,9 +239,9 @@ class PixivApi {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: serialize(body)
+      data: serialize(data)
     }
-    return this.fetchUrl('/v1/illust/bookmark/delete', options);
+    return this.requestUrl('/v1/illust/bookmark/delete', options);
   }
 
   mangaRecommended(query) {
@@ -243,7 +249,7 @@ class PixivApi {
       include_ranking_label: 'true',
       filter
     }, query));
-    return this.fetchUrl(`/v1/manga/recommended?${query}`);
+    return this.requestUrl(`/v1/manga/recommended?${query}`);
   }
 
   //require auth
@@ -252,10 +258,10 @@ class PixivApi {
       include_ranking_label: 'true',
       filter
     }, query));
-    return this.fetchUrl(`/v1/novel/recommended?${query}`);
+    return this.requestUrl(`/v1/novel/recommended?${query}`);
   }
 
-  fetchUrl(url, options) {
+  requestUrl(url, options) {
     if (!url) {
       return Promise.reject("Url cannot be empty");
     }
@@ -270,12 +276,12 @@ class PixivApi {
     if (this.auth && this.auth.access_token) {
       options.headers['Authorization'] = `Bearer ${this.auth.access_token}`;
     }
-    return fetchApi(url, options).then(json => {
+    return callApi(url, options).then(json => {
       return json;
     }).catch(err => {
       //login again in case token expired
       return this.login().then(auth => {
-        return fetchApi(url, options);
+        return callApi(url, options);
       });
     });
   }
