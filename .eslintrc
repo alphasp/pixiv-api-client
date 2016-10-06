@@ -1,0 +1,28 @@
+{
+    "extends": "airbnb-base",
+    "rules": {
+        "brace-style": [
+            2,
+            "stroustrup"
+        ],
+        "arrow-parens": [
+            2,
+            "as-needed"
+        ],
+        "no-param-reassign": 0,
+        "import/no-extraneous-dependencies": [
+            2, 
+            { 
+                "devDependencies": true 
+            }
+        ]
+    },
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true
+    },
+    "parserOptions": {
+        "sourceType": "module"
+    }
+}

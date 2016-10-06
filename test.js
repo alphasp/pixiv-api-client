@@ -14,10 +14,10 @@ test.beforeEach('new PixivApi()', async t => {
   t.true(isObject(json));
 });
 
-test('login', async t => {
-  const json = await t.context.pixiv.login(username, password);
-  t.true(isObject(json));
-})
+// test('login', async (t) => {
+//   const json = await t.context.pixiv.login(username, password);
+//   t.true(isObject(json));
+// });
 
 test('expose a constructor', t => {
   t.true(typeof PixivApi === 'function');
@@ -109,9 +109,9 @@ test.serial('unbookmarkIllust', async t => {
 });
 
 test.serial('logout', async t => {
-  const json = await t.context.pixiv.logout();
+  await t.context.pixiv.logout();
   t.true(t.context.pixiv.authInfo() === null);
-})
+});
 
 test('error if params missing', async t => {
   await t.throws(t.context.pixiv.login(), /username required/);

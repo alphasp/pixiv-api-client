@@ -4,7 +4,8 @@
   "description": "Promise based Pixiv API client for react native and node.js",
   "main": "index.js",
   "scripts": {
-    "test": "ava"
+    "test": "ava",
+    "lint": "eslint './index.js' './test.js'"
   },
   "author": {
     "name": "alphasp",
@@ -31,6 +32,9 @@
   },
   "devDependencies": {
     "ava": "^0.16.0",
+    "eslint": "^3.7.1",
+    "eslint-config-airbnb-base": "^8.0.0",
+    "eslint-plugin-import": "^1.16.0",
     "lodash.isobject": "^3.0.2"
   }
 }
