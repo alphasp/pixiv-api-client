@@ -14,11 +14,11 @@ $ npm install pixiv-api-client --save
 
 ```js
 const PixivApi = require('pixiv-api-client');
-const pixiv = new PixivApi('username', 'password');
+const pixiv = new PixivApi();
 
 const word = 'ラブライブ';
 //login and call api that require login
-pixiv.login().then(() => {
+pixiv.login('username', 'password').then(() => {
   pixiv.illustFollow().then(json => {
 	console.log(json);
 	return json;
@@ -34,15 +34,14 @@ pixiv.searchIllust(word).then(json => {
 
 ## API
 
-### PixivApi(username, password)
-username and password is optional, able to access public api without login
+### PixivApi()
+<hr>
 
+#### pixiv.login(username, password)
 - `username` - Pixiv username
 - `password` - Pixiv password
 
-<hr>
-
-#### pixiv.login()
+#### pixiv.logout()
 
 #### pixiv.searchIllust(word, query)
 - `word` - word to search (required)
