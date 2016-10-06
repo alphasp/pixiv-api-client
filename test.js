@@ -8,14 +8,14 @@ const username = process.env.USERNAME;
 const password = process.env.PASSWORD;
 
 test.beforeEach('new PixivApi()', async t => {
-  const pixiv = new PixivApi(username, password);
+  const pixiv = new PixivApi();
   t.context.pixiv = pixiv;
-  const json = await t.context.pixiv.login();
+  const json = await t.context.pixiv.login(username, password);
   t.true(isObject(json));
 });
 
 test('login', async t => {
-  const json = await t.context.pixiv.login();
+  const json = await t.context.pixiv.login(username, password);
   t.true(isObject(json));
 })
 
@@ -88,16 +88,6 @@ test('illustBookmarkDetail', async t => {
   t.true(isObject(json));
 });
 
-test.serial('bookmarkIllust', async t => {
-  const json = await t.context.pixiv.bookmarkIllust(illustId);
-  t.true(isObject(json));
-});
-
-test.serial('unbookmarkIllust', async t => {
-  const json = await t.context.pixiv.unbookmarkIllust(illustId);
-  t.true(isObject(json));
-});
-
 test('mangaRecommended', async t => {
   const json = await t.context.pixiv.mangaRecommended();
   t.true(isObject(json));
@@ -108,7 +98,24 @@ test('novelRecommended', async t => {
   t.true(isObject(json));
 });
 
+test.serial('bookmarkIllust', async t => {
+  const json = await t.context.pixiv.bookmarkIllust(illustId);
+  t.true(isObject(json));
+});
+
+test.serial('unbookmarkIllust', async t => {
+  const json = await t.context.pixiv.unbookmarkIllust(illustId);
+  t.true(isObject(json));
+});
+
+test.serial('logout', async t => {
+  const json = await t.context.pixiv.logout();
+  t.true(t.context.pixiv.authInfo() === null);
+})
+
 test('error if params missing', async t => {
+  await t.throws(t.context.pixiv.login(), /username required/);
+  await t.throws(t.context.pixiv.login(username), /password required/);
   await t.throws(t.context.pixiv.userDetail(), /user_id required/);
   await t.throws(t.context.pixiv.userIllusts(), /user_id required/);
   await t.throws(t.context.pixiv.userBookmarksIllust(), /user_id required/);
