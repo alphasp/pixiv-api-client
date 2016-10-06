@@ -24,18 +24,20 @@ function serialize(obj) {
 }
 
 class PixivApi {
-  constructor(username, password) {
-    this.username = username;
-    this.password = password;
-  }
-  login() {
+  login(username, password) {
+    if (!username) {
+      return Promise.reject(new Error("username required"));
+    }
+    if (!password) {
+      return Promise.reject(new Error("password required"));
+    }
     const data = {
       client_id: 'bYGKuGVw91e0NMfPGp44euvGt59s',
       client_secret: 'HP3RmkgAmEGro0gn1x9ioawQE8WMfvLXDz3ZqxpK',
       get_secure_url: 1,
       grant_type: 'password',
-      username: this.username,
-      password: this.password,
+      username: username,
+      password: password,
       device_token: 'pixiv'
     };
     const options = {
@@ -50,9 +52,6 @@ class PixivApi {
         return res.data;
       }
       else {
-        // return res.data().then(err => {
-        //   throw err;
-        // })
         throw res.data
       }
     }).then(json => {
@@ -66,6 +65,12 @@ class PixivApi {
         throw err.message;
       }
     });
+  }
+  logout() {
+    this.auth = null;
+    this.username = null;
+    this.password = null;
+    return Promise.resolve();
   }
 
   authInfo() {
@@ -280,7 +285,7 @@ class PixivApi {
       return json;
     }).catch(err => {
       //login again in case token expired
-      return this.login().then(auth => {
+      return this.login(this.username, this.password).then(auth => {
         return callApi(url, options);
       });
     });
