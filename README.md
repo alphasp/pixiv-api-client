@@ -28,7 +28,9 @@ pixiv.login('username', 'password').then(() => {
 //search illusts
 pixiv.searchIllust(word).then(json => {
   console.log(json);
-  return json;
+  return pixiv.requestUrl(json.next_url);
+}).then(json => {
+  console.log(json); //next results
 });
 ```
 
@@ -81,6 +83,9 @@ require auth
 - `id` - Pixiv illust id
 - `query` - object (optional)
 
+#### pixiv.illustNew(query)
+- `query` - object (optional)
+ 
 #### pixiv.illustFollow(query)
 require auth
 
@@ -88,8 +93,12 @@ require auth
   - `restrict` - one of `public` | `private`
 
 #### pixiv.illustRecommended(query)
+require auth
+
 - `query` - object (optional)
 
+#### pixiv.illustRecommendedPublic(query)
+- `query` - object (optional)
 
 #### pixiv.illustRanking(query)
 mode `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` require auth
@@ -118,10 +127,53 @@ require auth
 #### pixiv.mangaRecommended(query)
 - `query` - object (optional)
 
+#### pixiv.mangaNew(query)
+- `query` - object (optional)
+
+#### pixiv.searchNovel(word, query)
+- `word` - word to search (required)
+- `query` - object (optional)
+  - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption`
+  - `sort`: `date_desc` | `date_asc` (default: `date_desc`)
+  - `duration`: `within_last_day` | `within_last_week` | `within_last_month`
+ 
 #### pixiv.novelRecommended(query)
 require auth
 
 - `query` - object (optional)
+
+#### pixiv.novelRecommendedPublic(query)
+- `query` - object (optional)
+
+#### pixiv.novelNew(query)
+- `query` - object (optional)
+
+#### pixiv.userRecommended(query)
+- `query` - object (optional)
+
+#### pixiv.userFollowing(id, query)
+restrict `private` require auth
+
+- `id` - Pixiv user id
+- `query` - object (optional)
+  - `restrict`: `public` | `private` (default: `public`)
+
+
+#### pixiv.followUser(id)
+require auth
+
+- `id` - Pixiv user id
+
+#### pixiv.unfollowUser(id)
+require auth
+
+- `id` - Pixiv user id
+
+#### pixiv.requestUrl(url, options)
+can be use to request pixiv endpoint or use for traversing results by passing next_url from result of other api such as `pixiv.searchIllust`
+
+- `query` - object (optional)
+
 
 ## Tests
 

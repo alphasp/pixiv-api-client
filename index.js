@@ -9,7 +9,7 @@ const BASE_URL = 'https://app-api.pixiv.net';
 const filter = 'for_ios';
 
 function callApi(url, options) {
-  const finalUrl = BASE_URL + url;
+  const finalUrl = /\b(http|https)/.test(url) ? url : BASE_URL + url;
   return axios(finalUrl, options).then(res => res.data).catch(err => {
     if (err.response) {
       throw err.response.data;
@@ -86,9 +86,23 @@ class PixivApi {
       word,
       search_target: 'partial_match_for_tags',
       sort: 'date_desc',
-      filter: 'for_ios',
+      filter,
     }, query));
     return this.requestUrl(`/v1/search/illust?${query}`);
+  }
+
+  searchNovel(word, query) {
+    if (!word) {
+      return Promise.reject(new Error('word required'));
+    }
+
+    query = qs.stringify(Object.assign({
+      word,
+      search_target: 'partial_match_for_tags',
+      sort: 'date_desc',
+      filter,
+    }, query));
+    return this.requestUrl(`/v1/search/novel?${query}`);
   }
 
   userDetail(id, query) {
@@ -148,7 +162,7 @@ class PixivApi {
 
     query = qs.stringify(Object.assign({
       illust_id: id,
-      include_total_comments: 'true',
+      include_total_comments: true,
     }, query));
     return this.requestUrl(`/v1/illust/comments?${query}`);
   }
@@ -177,6 +191,13 @@ class PixivApi {
     return this.requestUrl(`/v1/illust/detail?${query}`);
   }
 
+  illustNew(query) {
+    query = qs.stringify(Object.assign({
+      content_type: 'illust',
+      filter,
+    }, query));
+    return this.requestUrl(`/v1/illust/new?${query}`);
+  }
   // require auth
   illustFollow(query) {
     query = qs.stringify(Object.assign({
@@ -185,16 +206,23 @@ class PixivApi {
     return this.requestUrl(`/v2/illust/follow?${query}`);
   }
 
+  // require auth
   illustRecommended(query) {
     query = qs.stringify(Object.assign({
-      content_type: 'illust',
-      include_ranking_label: 'true',
+      include_ranking_illusts: true,
       filter,
     }, query));
     return this.requestUrl(`/v1/illust/recommended?${query}`);
   }
 
-  // require auth
+  illustRecommendedPublic(query) {
+    query = qs.stringify(Object.assign({
+      include_ranking_illusts: true,
+      filter,
+    }, query));
+    return this.requestUrl(`/v1/illust/recommended-nologin?${query}`);
+  }
+
   illustRanking(query) {
     query = qs.stringify(Object.assign({
       mode: 'day',
@@ -248,21 +276,100 @@ class PixivApi {
     return this.requestUrl('/v1/illust/bookmark/delete', options);
   }
 
+  // POST
+  followUser(id) {
+    if (!id) {
+      return Promise.reject(new Error('user_id required'));
+    }
+    const data = {
+      user_id: id,
+      restrict: 'public',
+    };
+    //
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data: serialize(data),
+    };
+    return this.requestUrl('/v1/user/follow/add', options);
+  }
+
+  // POST
+  unfollowUser(id) {
+    if (!id) {
+      return Promise.reject(new Error('user_id required'));
+    }
+    const data = {
+      user_id: id,
+      restrict: 'public',
+    };
+    //
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data: serialize(data),
+    };
+    return this.requestUrl('/v1/user/follow/delete', options);
+  }
+
   mangaRecommended(query) {
     query = qs.stringify(Object.assign({
-      include_ranking_label: 'true',
+      include_ranking_label: true,
       filter,
     }, query));
     return this.requestUrl(`/v1/manga/recommended?${query}`);
   }
 
+  mangaNew(query) {
+    query = qs.stringify(Object.assign({
+      content_type: 'manga',
+      filter,
+    }, query));
+    return this.requestUrl(`/v1/illust/new?${query}`);
+  }
+
   // require auth
   novelRecommended(query) {
     query = qs.stringify(Object.assign({
-      include_ranking_label: 'true',
+      include_ranking_novels: true,
       filter,
     }, query));
     return this.requestUrl(`/v1/novel/recommended?${query}`);
+  }
+
+  novelRecommendedPublic(query) {
+    query = qs.stringify(Object.assign({
+      include_ranking_novels: true,
+      filter,
+    }, query));
+    return this.requestUrl(`/v1/novel/recommended-nologin?${query}`);
+  }
+
+  novelNew(query) {
+    query = qs.stringify(query);
+    return this.requestUrl(`/v1/novel/new?${query}`);
+  }
+
+  userRecommended(query) {
+    query = qs.stringify(Object.assign({
+      filter,
+    }, query));
+    return this.requestUrl(`/v1/user/recommended?${query}`);
+  }
+
+  userFollowing(id, query) {
+    if (!id) {
+      return Promise.reject('user_id required');
+    }
+    query = qs.stringify(Object.assign({
+      user_id: id,
+      restrict: 'public',
+    }, query));
+    return this.requestUrl(`/v1/user/following?${query}`);
   }
 
   requestUrl(url, options) {
