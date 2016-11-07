@@ -82,13 +82,13 @@ class PixivApi {
       return Promise.reject(new Error('word required'));
     }
 
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       word,
       search_target: 'partial_match_for_tags',
       sort: 'date_desc',
       filter,
     }, query));
-    return this.requestUrl(`/v1/search/illust?${query}`);
+    return this.requestUrl(`/v1/search/illust?${queryString}`);
   }
 
   searchNovel(word, query) {
@@ -96,13 +96,34 @@ class PixivApi {
       return Promise.reject(new Error('word required'));
     }
 
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       word,
       search_target: 'partial_match_for_tags',
       sort: 'date_desc',
       filter,
     }, query));
-    return this.requestUrl(`/v1/search/novel?${query}`);
+    return this.requestUrl(`/v1/search/novel?${queryString}`);
+  }
+
+  searchUser(word) {
+    if (!word) {
+      return Promise.reject('word required');
+    }
+    const queryString = qs.stringify(Object.assign({
+      word,
+      filter,
+    }));
+    return this.requestUrl(`/v1/search/user?${queryString}`);
+  }
+
+  searchAutoComplete(word) {
+    if (!word) {
+      return Promise.reject('word required');
+    }
+    const queryString = qs.stringify(Object.assign({
+      word,
+    }));
+    return this.requestUrl(`/v1/search/autocomplete?${queryString}`);
   }
 
   userDetail(id, query) {
@@ -110,11 +131,11 @@ class PixivApi {
       return Promise.reject(new Error('user_id required'));
     }
 
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       user_id: id,
       filter,
     }, query));
-    return this.requestUrl(`/v1/user/detail?${query}`);
+    return this.requestUrl(`/v1/user/detail?${queryString}`);
   }
 
   userIllusts(id, query) {
@@ -122,12 +143,12 @@ class PixivApi {
       return Promise.reject(new Error('user_id required'));
     }
 
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       user_id: id,
       type: 'illust',
       filter,
     }, query));
-    return this.requestUrl(`/v1/user/illusts?${query}`);
+    return this.requestUrl(`/v1/user/illusts?${queryString}`);
   }
 
   userBookmarksIllust(id, query) {
@@ -135,12 +156,12 @@ class PixivApi {
       return Promise.reject(new Error('user_id required'));
     }
 
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       user_id: id,
       restrict: 'public',
       filter,
     }, query));
-    return this.requestUrl(`/v1/user/bookmarks/illust?${query}`);
+    return this.requestUrl(`/v1/user/bookmarks/illust?${queryString}`);
   }
 
   // require auth
@@ -149,10 +170,10 @@ class PixivApi {
       return Promise.reject(new Error('illust_id required'));
     }
 
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       illust_id: id,
     }, query));
-    return this.requestUrl(`/v2/illust/bookmark/detail?${query}`);
+    return this.requestUrl(`/v2/illust/bookmark/detail?${queryString}`);
   }
 
   illustComments(id, query) {
@@ -160,11 +181,11 @@ class PixivApi {
       return Promise.reject(new Error('illust_id required'));
     }
 
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       illust_id: id,
       include_total_comments: true,
     }, query));
-    return this.requestUrl(`/v1/illust/comments?${query}`);
+    return this.requestUrl(`/v1/illust/comments?${queryString}`);
   }
 
   illustRelated(id, query) {
@@ -172,11 +193,11 @@ class PixivApi {
       return Promise.reject(new Error('illust_id required'));
     }
 
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       illust_id: id,
       filter,
     }, query));
-    return this.requestUrl(`/v1/illust/related?${query}`);
+    return this.requestUrl(`/v1/illust/related?${queryString}`);
   }
 
   illustDetail(id, query) {
@@ -184,58 +205,58 @@ class PixivApi {
       return Promise.reject(new Error('illust_id required'));
     }
 
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       illust_id: id,
       filter,
     }, query));
-    return this.requestUrl(`/v1/illust/detail?${query}`);
+    return this.requestUrl(`/v1/illust/detail?${queryString}`);
   }
 
   illustNew(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       content_type: 'illust',
       filter,
     }, query));
-    return this.requestUrl(`/v1/illust/new?${query}`);
+    return this.requestUrl(`/v1/illust/new?${queryString}`);
   }
   // require auth
   illustFollow(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       restrict: 'public',
     }, query));
-    return this.requestUrl(`/v2/illust/follow?${query}`);
+    return this.requestUrl(`/v2/illust/follow?${queryString}`);
   }
 
   // require auth
   illustRecommended(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       include_ranking_illusts: true,
       filter,
     }, query));
-    return this.requestUrl(`/v1/illust/recommended?${query}`);
+    return this.requestUrl(`/v1/illust/recommended?${queryString}`);
   }
 
   illustRecommendedPublic(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       include_ranking_illusts: true,
       filter,
     }, query));
-    return this.requestUrl(`/v1/illust/recommended-nologin?${query}`);
+    return this.requestUrl(`/v1/illust/recommended-nologin?${queryString}`);
   }
 
   illustRanking(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       mode: 'day',
       filter,
     }, query));
-    return this.requestUrl(`/v1/illust/ranking?${query}`);
+    return this.requestUrl(`/v1/illust/ranking?${queryString}`);
   }
 
   trendingTagsIllust(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       filter,
     }, query));
-    return this.requestUrl(`/v1/trending-tags/illust?${query}`);
+    return this.requestUrl(`/v1/trending-tags/illust?${queryString}`);
   }
 
   // POST
@@ -317,59 +338,59 @@ class PixivApi {
   }
 
   mangaRecommended(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       include_ranking_label: true,
       filter,
     }, query));
-    return this.requestUrl(`/v1/manga/recommended?${query}`);
+    return this.requestUrl(`/v1/manga/recommended?${queryString}`);
   }
 
   mangaNew(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       content_type: 'manga',
       filter,
     }, query));
-    return this.requestUrl(`/v1/illust/new?${query}`);
+    return this.requestUrl(`/v1/illust/new?${queryString}`);
   }
 
   // require auth
   novelRecommended(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       include_ranking_novels: true,
       filter,
     }, query));
-    return this.requestUrl(`/v1/novel/recommended?${query}`);
+    return this.requestUrl(`/v1/novel/recommended?${queryString}`);
   }
 
   novelRecommendedPublic(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       include_ranking_novels: true,
       filter,
     }, query));
-    return this.requestUrl(`/v1/novel/recommended-nologin?${query}`);
+    return this.requestUrl(`/v1/novel/recommended-nologin?${queryString}`);
   }
 
   novelNew(query) {
-    query = qs.stringify(query);
-    return this.requestUrl(`/v1/novel/new?${query}`);
+    const queryString = qs.stringify(query);
+    return this.requestUrl(`/v1/novel/new?${queryString}`);
   }
 
   userRecommended(query) {
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       filter,
     }, query));
-    return this.requestUrl(`/v1/user/recommended?${query}`);
+    return this.requestUrl(`/v1/user/recommended?${queryString}`);
   }
 
   userFollowing(id, query) {
     if (!id) {
       return Promise.reject('user_id required');
     }
-    query = qs.stringify(Object.assign({
+    const queryString = qs.stringify(Object.assign({
       user_id: id,
       restrict: 'public',
     }, query));
-    return this.requestUrl(`/v1/user/following?${query}`);
+    return this.requestUrl(`/v1/user/following?${queryString}`);
   }
 
   requestUrl(url, options) {

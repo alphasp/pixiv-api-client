@@ -104,6 +104,16 @@ test('searchNovel', async t => {
   t.true(isObject(json));
 });
 
+test('searchUser', async t => {
+  const json = await t.context.pixiv.searchUser(word);
+  t.true(isObject(json));
+});
+
+test('searchAutoComplete', async t => {
+  const json = await t.context.pixiv.searchAutoComplete(word);
+  t.true(isObject(json));
+});
+
 test('illustBookmarkDetail', async t => {
   const json = await t.context.pixiv.illustBookmarkDetail(illustId);
   t.true(isObject(json));
@@ -185,6 +195,8 @@ test('error if params missing', async t => {
 
   await t.throws(t.context.pixiv.searchIllust(), /word required/);
   await t.throws(t.context.pixiv.searchNovel(), /word required/);
+  await t.throws(t.context.pixiv.searchUser(), /word required/);
+  await t.throws(t.context.pixiv.searchAutoComplete(), /word required/);
 
   await t.throws(t.context.pixiv.illustBookmarkDetail(), /illust_id required/);
 });

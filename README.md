@@ -52,6 +52,12 @@ pixiv.searchIllust(word).then(json => {
   - `sort`: `date_desc` | `date_asc` (default: `date_desc`)
   - `duration`: `within_last_day` | `within_last_week` | `within_last_month`
 
+#### pixiv.searchUser(word)
+- `word` - word to search (required)
+
+#### pixiv.searchAutoComplete(word)
+- `word` - word to search (required)
+
 #### pixiv.userDetail(userId, query)
 - `userId` - Pixiv user id
 - `query` - object (optional)
