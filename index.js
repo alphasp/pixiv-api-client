@@ -28,7 +28,7 @@ function serialize(obj) {
 }
 
 class PixivApi {
-  login(username, password) {
+  login(username, password, rememberPassword = true) {
     if (!username) {
       return Promise.reject(new Error('username required'));
     }
@@ -54,8 +54,11 @@ class PixivApi {
     return axios('https://oauth.secure.pixiv.net/auth/token', options)
     .then(res => {
       this.auth = res.data.response;
-      this.username = username;
-      this.password = password;
+      this.rememberPassword = rememberPassword;
+      if (rememberPassword) {
+        this.username = username;
+        this.password = password;
+      }
       return res.data.response;
     }).catch(err => {
       if (err.response) {
@@ -107,7 +110,7 @@ class PixivApi {
 
   searchUser(word) {
     if (!word) {
-      return Promise.reject('word required');
+      return Promise.reject(new Error('word required'));
     }
     const queryString = qs.stringify(Object.assign({
       word,
@@ -222,7 +225,7 @@ class PixivApi {
   // require auth
   illustFollow(options) {
     const queryString = qs.stringify(Object.assign({
-      restrict: 'public',
+      restrict: 'all',
     }, options));
     return this.requestUrl(`/v2/illust/follow?${queryString}`);
   }
@@ -419,11 +422,13 @@ class PixivApi {
       options.headers.Authorization = `Bearer ${this.auth.access_token}`;
     }
     return callApi(url, options).then(json => json).catch(err => {
-      if (this.username && this.password) {
-        return this.login(this.username, this.password).then(() => {
-          options.headers.Authorization = `Bearer ${this.auth.access_token}`;
-          return callApi(url, options);
-        });
+      if (this.rememberPassword) {
+        if (this.username && this.password) {
+          return this.login(this.username, this.password).then(() => {
+            options.headers.Authorization = `Bearer ${this.auth.access_token}`;
+            return callApi(url, options);
+          });
+        }
       }
       throw err;
     });
