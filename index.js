@@ -77,7 +77,7 @@ class PixivApi {
     return this.auth;
   }
 
-  searchIllust(word, query) {
+  searchIllust(word, options) {
     if (!word) {
       return Promise.reject(new Error('word required'));
     }
@@ -87,11 +87,11 @@ class PixivApi {
       search_target: 'partial_match_for_tags',
       sort: 'date_desc',
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/search/illust?${queryString}`);
   }
 
-  searchNovel(word, query) {
+  searchNovel(word, options) {
     if (!word) {
       return Promise.reject(new Error('word required'));
     }
@@ -101,7 +101,7 @@ class PixivApi {
       search_target: 'partial_match_for_tags',
       sort: 'date_desc',
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/search/novel?${queryString}`);
   }
 
@@ -126,7 +126,7 @@ class PixivApi {
     return this.requestUrl(`/v1/search/autocomplete?${queryString}`);
   }
 
-  userDetail(id, query) {
+  userDetail(id, options) {
     if (!id) {
       return Promise.reject(new Error('user_id required'));
     }
@@ -134,11 +134,11 @@ class PixivApi {
     const queryString = qs.stringify(Object.assign({
       user_id: id,
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/user/detail?${queryString}`);
   }
 
-  userIllusts(id, query) {
+  userIllusts(id, options) {
     if (!id) {
       return Promise.reject(new Error('user_id required'));
     }
@@ -147,11 +147,11 @@ class PixivApi {
       user_id: id,
       type: 'illust',
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/user/illusts?${queryString}`);
   }
 
-  userBookmarksIllust(id, query) {
+  userBookmarksIllust(id, options) {
     if (!id) {
       return Promise.reject(new Error('user_id required'));
     }
@@ -160,23 +160,23 @@ class PixivApi {
       user_id: id,
       restrict: 'public',
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/user/bookmarks/illust?${queryString}`);
   }
 
   // require auth
-  illustBookmarkDetail(id, query) {
+  illustBookmarkDetail(id, options) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
     }
 
     const queryString = qs.stringify(Object.assign({
       illust_id: id,
-    }, query));
+    }, options));
     return this.requestUrl(`/v2/illust/bookmark/detail?${queryString}`);
   }
 
-  illustComments(id, query) {
+  illustComments(id, options) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
     }
@@ -184,11 +184,11 @@ class PixivApi {
     const queryString = qs.stringify(Object.assign({
       illust_id: id,
       include_total_comments: true,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/illust/comments?${queryString}`);
   }
 
-  illustRelated(id, query) {
+  illustRelated(id, options) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
     }
@@ -196,11 +196,11 @@ class PixivApi {
     const queryString = qs.stringify(Object.assign({
       illust_id: id,
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/illust/related?${queryString}`);
   }
 
-  illustDetail(id, query) {
+  illustDetail(id, options) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
     }
@@ -208,54 +208,54 @@ class PixivApi {
     const queryString = qs.stringify(Object.assign({
       illust_id: id,
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/illust/detail?${queryString}`);
   }
 
-  illustNew(query) {
+  illustNew(options) {
     const queryString = qs.stringify(Object.assign({
       content_type: 'illust',
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/illust/new?${queryString}`);
   }
   // require auth
-  illustFollow(query) {
+  illustFollow(options) {
     const queryString = qs.stringify(Object.assign({
       restrict: 'public',
-    }, query));
+    }, options));
     return this.requestUrl(`/v2/illust/follow?${queryString}`);
   }
 
   // require auth
-  illustRecommended(query) {
+  illustRecommended(options) {
     const queryString = qs.stringify(Object.assign({
       include_ranking_illusts: true,
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/illust/recommended?${queryString}`);
   }
 
-  illustRecommendedPublic(query) {
+  illustRecommendedPublic(options) {
     const queryString = qs.stringify(Object.assign({
       include_ranking_illusts: true,
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/illust/recommended-nologin?${queryString}`);
   }
 
-  illustRanking(query) {
+  illustRanking(options) {
     const queryString = qs.stringify(Object.assign({
       mode: 'day',
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/illust/ranking?${queryString}`);
   }
 
-  trendingTagsIllust(query) {
+  trendingTagsIllust(options) {
     const queryString = qs.stringify(Object.assign({
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/trending-tags/illust?${queryString}`);
   }
 
@@ -337,59 +337,59 @@ class PixivApi {
     return this.requestUrl('/v1/user/follow/delete', options);
   }
 
-  mangaRecommended(query) {
+  mangaRecommended(options) {
     const queryString = qs.stringify(Object.assign({
       include_ranking_label: true,
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/manga/recommended?${queryString}`);
   }
 
-  mangaNew(query) {
+  mangaNew(options) {
     const queryString = qs.stringify(Object.assign({
       content_type: 'manga',
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/illust/new?${queryString}`);
   }
 
   // require auth
-  novelRecommended(query) {
+  novelRecommended(options) {
     const queryString = qs.stringify(Object.assign({
       include_ranking_novels: true,
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/novel/recommended?${queryString}`);
   }
 
-  novelRecommendedPublic(query) {
+  novelRecommendedPublic(options) {
     const queryString = qs.stringify(Object.assign({
       include_ranking_novels: true,
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/novel/recommended-nologin?${queryString}`);
   }
 
-  novelNew(query) {
-    const queryString = qs.stringify(query);
+  novelNew(options) {
+    const queryString = qs.stringify(options);
     return this.requestUrl(`/v1/novel/new?${queryString}`);
   }
 
-  userRecommended(query) {
+  userRecommended(options) {
     const queryString = qs.stringify(Object.assign({
       filter,
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/user/recommended?${queryString}`);
   }
 
-  userFollowing(id, query) {
+  userFollowing(id, options) {
     if (!id) {
       return Promise.reject('user_id required');
     }
     const queryString = qs.stringify(Object.assign({
       user_id: id,
       restrict: 'public',
-    }, query));
+    }, options));
     return this.requestUrl(`/v1/user/following?${queryString}`);
   }
 
