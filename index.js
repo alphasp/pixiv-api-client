@@ -393,6 +393,16 @@ class PixivApi {
     return this.requestUrl(`/v1/user/following?${queryString}`);
   }
 
+  userFollowDetail(id) {
+    if (!id) {
+      return Promise.reject('user_id required');
+    }
+    const queryString = qs.stringify(Object.assign({
+      user_id: id,
+    }));
+    return this.requestUrl(`/v1/user/follow/detail?${queryString}`);
+  }
+
   requestUrl(url, options) {
     if (!url) {
       return Promise.reject('Url cannot be empty');
