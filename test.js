@@ -5,7 +5,7 @@ import PixivApi from './';
 const userId = 67388;
 const illustId = 56317718;
 const word = 'ラブライブ';
-const username = process.env.USERNAME;
+const username = process.env.USER_NAME;
 const password = process.env.PASSWORD;
 
 test.beforeEach('new PixivApi()', async t => {
