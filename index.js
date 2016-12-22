@@ -54,7 +54,8 @@ class PixivApi {
     return axios('https://oauth.secure.pixiv.net/auth/token', options)
     .then(res => {
       this.auth = res.data.response;
-      this.rememberPassword = rememberPassword || true;
+      // eslint-disable-next-line no-unneeded-ternary
+      this.rememberPassword = rememberPassword === false ? false : true;
       if (rememberPassword) {
         this.username = username;
         this.password = password;
