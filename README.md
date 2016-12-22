@@ -19,7 +19,7 @@ const pixiv = new PixivApi();
 const word = 'ラブライブ';
 //login and call api that require login
 pixiv.login('username', 'password').then(() => {
-  pixiv.illustFollow().then(json => {
+  return pixiv.illustFollow().then(json => {
 	console.log(json);
 	return json;
   });
@@ -39,16 +39,19 @@ pixiv.searchIllust(word).then(json => {
 ### PixivApi()
 <hr>
 
-#### pixiv.login(username, password)
+#### pixiv.login(username, password, rememberPassword)
+Api client will try once to relogin again on error if rememberPassword is set to `true`
+
 - `username` - Pixiv username
 - `password` - Pixiv password
+- `rememberPassword` - Boolean (default: `true`)
 
 #### pixiv.logout()
 
-#### pixiv.searchIllust(word, query)
+#### pixiv.searchIllust(word, options)
 - `word` - word to search (required)
-- `query` - object (optional)
-  - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption`
+- `options` - object (optional)
+  - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption` (default: `partial_match_for_tags`)
   - `sort`: `date_desc` | `date_asc` (default: `date_desc`)
   - `duration`: `within_last_day` | `within_last_week` | `within_last_month`
 
@@ -58,110 +61,110 @@ pixiv.searchIllust(word).then(json => {
 #### pixiv.searchAutoComplete(word)
 - `word` - word to search (required)
 
-#### pixiv.userDetail(userId, query)
+#### pixiv.userDetail(userId, options)
 - `userId` - Pixiv user id
-- `query` - object (optional)
+- `options` - object (optional)
 
-#### pixiv.userIllusts(id, query) 
+#### pixiv.userIllusts(id, options) 
 - `id` - Pixiv illust id
-- `query` - object (optional)
+- `options` - object (optional)
 
-#### pixiv.userBookmarksIllust(id, query)
+#### pixiv.userBookmarksIllust(id, options)
 - `id` - Pixiv illust id
-- `query` - object (optional)
+- `options` - object (optional)
   - `restrict` - one of `public` | `private`
 
-#### pixiv.illustBookmarkDetail(id, query)
+#### pixiv.illustBookmarkDetail(id, options)
 require auth
 
 - `id` - Pixiv illust id
-- `query` - object (optional)
+- `options` - object (optional)
 
-#### pixiv.illustComments(id, query)
+#### pixiv.illustComments(id, options)
 - `id` - Pixiv illust id
-- `query` - object (optional)
+- `options` - object (optional)
 
-#### pixiv.illustRelated(id, query)
+#### pixiv.illustRelated(id, options)
 - `id` - Pixiv illust id
-- `query` - object (optional)
+- `options` - object (optional)
 
-#### pixiv.illustDetail(id, query)
+#### pixiv.illustDetail(id, options)
 - `id` - Pixiv illust id
-- `query` - object (optional)
+- `options` - object (optional)
 
-#### pixiv.illustNew(query)
-- `query` - object (optional)
+#### pixiv.illustNew(options)
+- `options` - object (optional)
  
-#### pixiv.illustFollow(query)
+#### pixiv.illustFollow(options)
 require auth
 
-- `query` - object (optional)
-  - `restrict` - one of `public` | `private`
+- `options` - object (optional)
+  - `restrict` - one of `all` | `public` | `private`  (default: `all`)
 
-#### pixiv.illustRecommended(query)
+#### pixiv.illustRecommended(options)
 require auth
 
-- `query` - object (optional)
+- `options` - object (optional)
 
-#### pixiv.illustRecommendedPublic(query)
-- `query` - object (optional)
+#### pixiv.illustRecommendedPublic(options)
+- `options` - object (optional)
 
-#### pixiv.illustRanking(query)
+#### pixiv.illustRanking(options)
 mode `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` require auth
 
-- `query` - object
-  - `restrict`: one of `public` | `private`
-  - `date`: `2016-08-15`
-  - `mode`: `day` | `week` | `month` | `day_male` | `day_female` | `week_original` | `week_rookie` | `day_mang` | `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` (default: `day`)
+- `options` - object
+  - `date`: Date
+  - `mode`: `day` | `week` | `month` | `day_male` | `day_female` | `week_original` | `week_rookie` | `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` (default: `day`)
 
-#### pixiv.illustRanking(query)
-- `query` - object (optional)
-
-#### pixiv.trendingTagsIllust(query)
-- `query` - object (optional)
+#### pixiv.trendingTagsIllust(options)
+- `options` - object (optional)
 
 #### pixiv.bookmarkIllust(id)
 require auth
 
 - `id` - Pixiv illust id
+- `options` - object (optional)
+  - `restrict` - one of `public` | `private` (default: `public`)
 
 #### pixiv.unbookmarkIllust(id)
 require auth
 
 - `id` - Pixiv illust id
+- `options` - object (optional)
+  - `restrict` - one of `public` | `private` (default: `public`)
 
-#### pixiv.mangaRecommended(query)
-- `query` - object (optional)
+#### pixiv.mangaRecommended(options)
+- `options` - object (optional)
 
-#### pixiv.mangaNew(query)
-- `query` - object (optional)
+#### pixiv.mangaNew(options)
+- `options` - object (optional)
 
-#### pixiv.searchNovel(word, query)
+#### pixiv.searchNovel(word, options)
 - `word` - word to search (required)
-- `query` - object (optional)
-  - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption`
+- `options` - object (optional)
+  - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption` (default: `partial_match_for_tags`)
   - `sort`: `date_desc` | `date_asc` (default: `date_desc`)
   - `duration`: `within_last_day` | `within_last_week` | `within_last_month`
  
-#### pixiv.novelRecommended(query)
+#### pixiv.novelRecommended(options)
 require auth
 
-- `query` - object (optional)
+- `options` - object (optional)
 
-#### pixiv.novelRecommendedPublic(query)
-- `query` - object (optional)
+#### pixiv.novelRecommendedPublic(options)
+- `options` - object (optional)
 
-#### pixiv.novelNew(query)
-- `query` - object (optional)
+#### pixiv.novelNew(options)
+- `options` - object (optional)
 
-#### pixiv.userRecommended(query)
-- `query` - object (optional)
+#### pixiv.userRecommended(options)
+- `options` - object (optional)
 
-#### pixiv.userFollowing(id, query)
+#### pixiv.userFollowing(id, options)
 restrict `private` require auth
 
 - `id` - Pixiv user id
-- `query` - object (optional)
+- `options` - object (optional)
   - `restrict`: `public` | `private` (default: `public`)
 
 
@@ -178,7 +181,7 @@ require auth
 #### pixiv.requestUrl(url, options)
 can be use to request pixiv endpoint or use for traversing results by passing next_url from result of other api such as `pixiv.searchIllust`
 
-- `query` - object (optional)
+- `options` - object (optional)
 
 
 ## Tests
@@ -186,7 +189,7 @@ can be use to request pixiv endpoint or use for traversing results by passing ne
 Export pixiv username and password before running Tests.
 
 ```
-$ export USERNAME=Pixiv username
+$ export USER_NAME=Pixiv username
 $ export PASSWORD=Pixiv password
 $ npm test
 ```
