@@ -28,7 +28,7 @@ function serialize(obj) {
 }
 
 class PixivApi {
-  login(username, password, rememberPassword = true) {
+  login(username, password, rememberPassword) {
     if (!username) {
       return Promise.reject(new Error('username required'));
     }
@@ -54,7 +54,7 @@ class PixivApi {
     return axios('https://oauth.secure.pixiv.net/auth/token', options)
     .then(res => {
       this.auth = res.data.response;
-      this.rememberPassword = rememberPassword;
+      this.rememberPassword = rememberPassword || true;
       if (rememberPassword) {
         this.username = username;
         this.password = password;
