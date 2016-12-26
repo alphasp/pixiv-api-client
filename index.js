@@ -169,6 +169,14 @@ class PixivApi {
   }
 
   // require auth
+  userBookmarkIllustTags(options) {
+    const queryString = qs.stringify(Object.assign({
+      restrict: 'public',
+    }, options));
+    return this.requestUrl(`/v1/user/bookmark-tags/illust?${queryString}`);
+  }
+
+  // require auth
   illustBookmarkDetail(id, options) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));

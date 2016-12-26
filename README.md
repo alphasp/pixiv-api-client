@@ -72,7 +72,11 @@ Api client will try once to relogin again on error if rememberPassword is set to
 #### pixiv.userBookmarksIllust(id, options)
 - `id` - Pixiv illust id
 - `options` - object (optional)
-  - `restrict` - one of `public` | `private`
+  - `restrict` - one of `public` | `private` (default: `public`)
+
+#### pixiv.userBookmarkIllustTags(options)
+- `options` - object (optional)
+  - `restrict` - one of `public` | `private` (default: `public`)
 
 #### pixiv.illustBookmarkDetail(id, options)
 require auth

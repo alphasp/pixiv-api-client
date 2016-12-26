@@ -44,6 +44,11 @@ test('userBookmarksIllust', async t => {
   t.true(isObject(json));
 });
 
+test('userBookmarkIllustTags', async t => {
+  const json = await t.context.pixiv.userBookmarkIllustTags(userId);
+  t.true(isObject(json));
+});
+
 test('userFollowing', async t => {
   const json = await t.context.pixiv.userFollowing(userId);
   t.true(isObject(json));
