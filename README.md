@@ -114,28 +114,26 @@ require auth
 - `options` - object (optional)
 
 #### pixiv.illustRanking(options)
-mode `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` require auth
+mode `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` | `day_r18_manga` | `week_r18_manga` | `week_r18g_manga` require auth
 
 - `options` - object
   - `date`: Date
-  - `mode`: `day` | `week` | `month` | `day_male` | `day_female` | `week_original` | `week_rookie` | `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` (default: `day`)
+  - `mode`: `day` | `week` | `month` | `day_male` | `day_female` | `week_original` | `week_rookie` | `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g`| `day_manga` | `week_manga` | `month_manga` | `week_rookie_manga` | `day_r18_manga` | `week_r18_manga` | `week_r18g_manga` (default: `day`)
 
 #### pixiv.trendingTagsIllust(options)
 - `options` - object (optional)
 
-#### pixiv.bookmarkIllust(id)
+#### pixiv.bookmarkIllust(id, restrict, tags)
 require auth
 
 - `id` - Pixiv illust id
-- `options` - object (optional)
-  - `restrict` - one of `public` | `private` (default: `public`)
+- `restrict` - one of `public` | `private` (default: `public`)
+- `tags` - array of string (optional)
 
 #### pixiv.unbookmarkIllust(id)
 require auth
 
 - `id` - Pixiv illust id
-- `options` - object (optional)
-  - `restrict` - one of `public` | `private` (default: `public`)
 
 #### pixiv.mangaRecommended(options)
 - `options` - object (optional)
