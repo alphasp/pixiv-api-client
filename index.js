@@ -20,13 +20,6 @@ function callApi(url, options) {
   });
 }
 
-function serialize(obj) {
-  return Object.keys(obj).reduce((a, k) => {
-    a.push(`${k}=${encodeURIComponent(obj[k])}`);
-    return a;
-  }, []).join('&');
-}
-
 class PixivApi {
   login(username, password, rememberPassword) {
     if (!username) {
@@ -35,7 +28,7 @@ class PixivApi {
     if (!password) {
       return Promise.reject(new Error('password required'));
     }
-    const data = {
+    const data = qs.stringify({
       client_id: 'bYGKuGVw91e0NMfPGp44euvGt59s',
       client_secret: 'HP3RmkgAmEGro0gn1x9ioawQE8WMfvLXDz3ZqxpK',
       get_secure_url: 1,
@@ -43,13 +36,13 @@ class PixivApi {
       username,
       password,
       device_token: 'pixiv',
-    };
+    });
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      data: serialize(data),
+      data,
     };
     return axios('https://oauth.secure.pixiv.net/auth/token', options)
     .then(res => {
@@ -209,7 +202,7 @@ class PixivApi {
       illust_id: id,
       filter,
     }, options));
-    return this.requestUrl(`/v1/illust/related?${queryString}`);
+    return this.requestUrl(`/v2/illust/related?${queryString}`);
   }
 
   illustDetail(id, options) {
@@ -272,23 +265,29 @@ class PixivApi {
   }
 
   // POST
-  bookmarkIllust(id) {
+  bookmarkIllust(id, restrict, tags) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
     }
-    const data = {
+    if (restrict && (['public', 'private'].indexOf(restrict) === -1)) {
+      return Promise.reject(new Error('invalid restrict value'));
+    }
+    if (tags && !Array.isArray(tags)) {
+      return Promise.reject(new Error('invalid tags value'));
+    }
+    const data = qs.stringify({
       illust_id: id,
-      restrict: 'public',
-    };
-    //
+      restrict: restrict || 'public',
+      tags: (tags && tags.length) ? tags : undefined,
+    });
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      data: serialize(data),
+      data,
     };
-    return this.requestUrl('/v1/illust/bookmark/add', options);
+    return this.requestUrl('/v2/illust/bookmark/add', options);
   }
 
   // POST
@@ -296,15 +295,15 @@ class PixivApi {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
     }
-    const data = {
+    const data = qs.stringify({
       illust_id: id,
-    };
+    });
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      data: serialize(data),
+      data,
     };
     return this.requestUrl('/v1/illust/bookmark/delete', options);
   }
@@ -314,17 +313,17 @@ class PixivApi {
     if (!id) {
       return Promise.reject(new Error('user_id required'));
     }
-    const data = {
+    const data = qs.stringify({
       user_id: id,
       restrict: 'public',
-    };
+    });
     //
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      data: serialize(data),
+      data,
     };
     return this.requestUrl('/v1/user/follow/add', options);
   }
@@ -334,17 +333,17 @@ class PixivApi {
     if (!id) {
       return Promise.reject(new Error('user_id required'));
     }
-    const data = {
+    const data = qs.stringify({
       user_id: id,
       restrict: 'public',
-    };
+    });
     //
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      data: serialize(data),
+      data,
     };
     return this.requestUrl('/v1/user/follow/delete', options);
   }
