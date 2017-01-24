@@ -94,6 +94,11 @@ test('illustNew', async t => {
   t.true(isObject(json));
 });
 
+test('illustMyPixiv', async t => {
+  const json = await t.context.pixiv.illustMyPixiv();
+  t.true(isObject(json));
+});
+
 test('trendingTagsIllust', async t => {
   const json = await t.context.pixiv.trendingTagsIllust();
   t.true(isObject(json));
@@ -174,6 +179,11 @@ test.serial('userFollowDetail', async t => {
   t.true(isObject(json));
 });
 
+test.serial('userFollower', async t => {
+  const json = await t.context.pixiv.userFollower(userId);
+  t.true(isObject(json));
+});
+
 test.serial('unfollowUser', async t => {
   const json = await t.context.pixiv.unfollowUser(userId);
   t.true(isObject(json));
@@ -192,6 +202,7 @@ test('error if params missing', async t => {
   await t.throws(t.context.pixiv.userBookmarksIllust(), /user_id required/);
   await t.throws(t.context.pixiv.userFollowing(), /user_id required/);
   await t.throws(t.context.pixiv.userFollowDetail(), /user_id required/);
+  await t.throws(t.context.pixiv.userFollower(), /user_id required/);
 
   await t.throws(t.context.pixiv.illustBookmarkDetail(), /illust_id required/);
   await t.throws(t.context.pixiv.illustComments(), /illust_id required/);
@@ -208,6 +219,4 @@ test('error if params missing', async t => {
   await t.throws(t.context.pixiv.searchNovel(), /word required/);
   await t.throws(t.context.pixiv.searchUser(), /word required/);
   await t.throws(t.context.pixiv.searchAutoComplete(), /word required/);
-
-  await t.throws(t.context.pixiv.illustBookmarkDetail(), /illust_id required/);
 });

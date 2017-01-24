@@ -257,6 +257,11 @@ class PixivApi {
     return this.requestUrl(`/v1/illust/ranking?${queryString}`);
   }
 
+  // require auth
+  illustMyPixiv() {
+    return this.requestUrl('/v2/illust/mypixiv');
+  }
+
   trendingTagsIllust(options) {
     const queryString = qs.stringify(Object.assign({
       filter,
@@ -412,6 +417,17 @@ class PixivApi {
       user_id: id,
     }));
     return this.requestUrl(`/v1/user/follow/detail?${queryString}`);
+  }
+
+  userFollower(id, options) {
+    if (!id) {
+      return Promise.reject('user_id required');
+    }
+    const queryString = qs.stringify(Object.assign({
+      user_id: id,
+      filter,
+    }, options));
+    return this.requestUrl(`/v1/user/follower?${queryString}`);
   }
 
   requestUrl(url, options) {

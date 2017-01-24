@@ -68,6 +68,7 @@ Api client will try once to relogin again on error if rememberPassword is set to
 #### pixiv.userIllusts(id, options) 
 - `id` - Pixiv illust id
 - `options` - object (optional)
+  - `type` - one of `illust` | `manga` (default: `illust`)
 
 #### pixiv.userBookmarksIllust(id, options)
 - `id` - Pixiv illust id
@@ -120,6 +121,9 @@ mode `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` | 
   - `date`: Date
   - `mode`: `day` | `week` | `month` | `day_male` | `day_female` | `week_original` | `week_rookie` | `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g`| `day_manga` | `week_manga` | `month_manga` | `week_rookie_manga` | `day_r18_manga` | `week_r18_manga` | `week_r18g_manga` (default: `day`)
 
+#### pixiv.illustMyPixiv()
+require auth
+
 #### pixiv.trendingTagsIllust(options)
 - `options` - object (optional)
 
@@ -169,6 +173,9 @@ restrict `private` require auth
 - `options` - object (optional)
   - `restrict`: `public` | `private` (default: `public`)
 
+#### pixiv.userFollower(id, options)
+- `id` - Pixiv user id
+- `options` - object (optional)
 
 #### pixiv.followUser(id)
 require auth
