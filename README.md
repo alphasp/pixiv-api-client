@@ -177,6 +177,9 @@ restrict `private` require auth
 - `id` - Pixiv user id
 - `options` - object (optional)
 
+#### pixiv.userMyPixiv(id)
+- `id` - Pixiv user id
+
 #### pixiv.followUser(id)
 require auth
 
