@@ -413,9 +413,7 @@ class PixivApi {
     if (!id) {
       return Promise.reject('user_id required');
     }
-    const queryString = qs.stringify(Object.assign({
-      user_id: id,
-    }));
+    const queryString = qs.stringify({ user_id: id });
     return this.requestUrl(`/v1/user/follow/detail?${queryString}`);
   }
 
@@ -428,6 +426,15 @@ class PixivApi {
       filter,
     }, options));
     return this.requestUrl(`/v1/user/follower?${queryString}`);
+  }
+
+  // require auth
+  userMyPixiv(id) {
+    if (!id) {
+      return Promise.reject('user_id required');
+    }
+    const queryString = qs.stringify({ user_id: id });
+    return this.requestUrl(`/v1/user/mypixiv?${queryString}`);
   }
 
   requestUrl(url, options) {

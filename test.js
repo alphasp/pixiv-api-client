@@ -189,6 +189,11 @@ test.serial('unfollowUser', async t => {
   t.true(isObject(json));
 });
 
+test.serial('userMyPixiv', async t => {
+  const json = await t.context.pixiv.userMyPixiv(userId);
+  t.true(isObject(json));
+});
+
 test.serial('logout', async t => {
   await t.context.pixiv.logout();
   t.true(t.context.pixiv.authInfo() === null);
@@ -203,6 +208,7 @@ test('error if params missing', async t => {
   await t.throws(t.context.pixiv.userFollowing(), /user_id required/);
   await t.throws(t.context.pixiv.userFollowDetail(), /user_id required/);
   await t.throws(t.context.pixiv.userFollower(), /user_id required/);
+  await t.throws(t.context.pixiv.userMyPixiv(), /user_id required/);
 
   await t.throws(t.context.pixiv.illustBookmarkDetail(), /illust_id required/);
   await t.throws(t.context.pixiv.illustComments(), /illust_id required/);
