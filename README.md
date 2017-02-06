@@ -180,10 +180,11 @@ restrict `private` require auth
 #### pixiv.userMyPixiv(id)
 - `id` - Pixiv user id
 
-#### pixiv.followUser(id)
+#### pixiv.followUser(id, restrict)
 require auth
 
 - `id` - Pixiv user id
+- `restrict` - one of `public` | `private` (default: `public`)
 
 #### pixiv.unfollowUser(id)
 require auth

@@ -63,6 +63,7 @@ class PixivApi {
       }
     });
   }
+
   logout() {
     this.auth = null;
     this.username = null;
@@ -314,15 +315,17 @@ class PixivApi {
   }
 
   // POST
-  followUser(id) {
+  followUser(id, restrict) {
     if (!id) {
       return Promise.reject(new Error('user_id required'));
     }
+    if (restrict && (['public', 'private'].indexOf(restrict) === -1)) {
+      return Promise.reject(new Error('invalid restrict value'));
+    }
     const data = qs.stringify({
       user_id: id,
-      restrict: 'public',
+      restrict: restrict || 'public',
     });
-    //
     const options = {
       method: 'POST',
       headers: {
