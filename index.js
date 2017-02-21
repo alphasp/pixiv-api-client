@@ -143,7 +143,6 @@ class PixivApi {
 
     const queryString = qs.stringify(Object.assign({
       user_id: id,
-      type: 'illust',
       filter,
     }, options));
     return this.requestUrl(`/v1/user/illusts?${queryString}`);
@@ -225,6 +224,7 @@ class PixivApi {
     }, options));
     return this.requestUrl(`/v1/illust/new?${queryString}`);
   }
+
   // require auth
   illustFollow(options) {
     const queryString = qs.stringify(Object.assign({
@@ -448,6 +448,7 @@ class PixivApi {
     options.headers = Object.assign({
       'App-OS': 'ios',
       // 'Accept-Language': 'en-us',
+      // 'Accept-Language': 'ja-jp',
       'App-OS-Version': '9.3.3',
       'App-Version': '6.1.2',
       'User-Agent': 'PixivIOSApp/6.1.2 (iOS 9.0; iPhone8,2)',

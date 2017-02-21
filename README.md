@@ -68,7 +68,7 @@ Api client will try once to relogin again on error if rememberPassword is set to
 #### pixiv.userIllusts(id, options) 
 - `id` - Pixiv illust id
 - `options` - object (optional)
-  - `type` - one of `illust` | `manga` (default: `illust`)
+  - `type` - one of `illust` | `manga`
 
 #### pixiv.userBookmarksIllust(id, options)
 - `id` - Pixiv illust id
