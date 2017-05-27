@@ -1,10 +1,13 @@
 {
-    "extends": "airbnb-base",
+    "extends": [
+        "airbnb-base",
+        "prettier"
+    ],
     "rules": {
-        "brace-style": [
-            2,
-            "stroustrup"
-        ],
+        "prettier/prettier": ["error", {
+            "trailingComma": "es5",
+            "singleQuote": true
+        }],
         "arrow-parens": [
             2,
             "as-needed"
@@ -24,5 +27,8 @@
     },
     "parserOptions": {
         "sourceType": "module"
-    }
+    },
+    "plugins": [
+        "prettier"
+    ]
 }
