@@ -1,5 +1,6 @@
 # Pixiv API Client
 [![Build Status](https://travis-ci.org/alphasp/pixiv-api-client.svg?branch=master)](https://travis-ci.org/alphasp/pixiv-api-client)
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 Promise based Pixiv API client for node.js and react native 
 
@@ -47,6 +48,11 @@ Api client will try once to relogin again on error if rememberPassword is set to
 - `rememberPassword` - Boolean (default: `true`)
 
 #### pixiv.logout()
+
+#### pixiv.refreshAccessToken(refreshToken)
+Refresh access token with refreshToken
+
+- `refreshToken` - string (if not provided, will use refresh token that stored with api client after login)
 
 #### pixiv.searchIllust(word, options)
 - `word` - word to search (required)
@@ -123,6 +129,12 @@ mode `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` | 
 
 #### pixiv.illustMyPixiv()
 require auth
+
+#### pixiv.illustAddComment(id, comment)
+require auth
+
+- `id` - Pixiv illust id
+- `comment` - string
 
 #### pixiv.trendingTagsIllust(options)
 - `options` - object (optional)
