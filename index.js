@@ -375,6 +375,28 @@ class PixivApi {
     return this.requestUrl('/v2/illust/mypixiv');
   }
 
+  // require auth
+  illustAddComment(id, comment) {
+    if (!id) {
+      return Promise.reject(new Error('illust_id required'));
+    }
+    if (!comment) {
+      return Promise.reject(new Error('comment required'));
+    }
+    const data = qs.stringify({
+      illust_id: id,
+      comment,
+    });
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data,
+    };
+    return this.requestUrl(`/v1/illust/comment/add`, options);
+  }
+
   trendingTagsIllust(options) {
     const queryString = qs.stringify(
       Object.assign(

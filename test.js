@@ -219,6 +219,11 @@ test('error if params missing', async t => {
   await t.throws(t.context.pixiv.illustComments(), /illust_id required/);
   await t.throws(t.context.pixiv.illustRelated(), /illust_id required/);
   await t.throws(t.context.pixiv.illustDetail(), /illust_id required/);
+  await t.throws(t.context.pixiv.illustAddComment(), /illust_id required/);
+  await t.throws(
+    t.context.pixiv.illustAddComment(illustId),
+    /comment required/
+  );
 
   await t.throws(t.context.pixiv.bookmarkIllust(), /illust_id required/);
   await t.throws(t.context.pixiv.unbookmarkIllust(), /illust_id required/);
