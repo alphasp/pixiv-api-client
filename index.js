@@ -6,6 +6,8 @@ const axios = require('axios');
 const qs = require('qs');
 
 const BASE_URL = 'https://app-api.pixiv.net';
+const CLIENT_ID = 'KzEZED7aC0vird8jWyHM38mXjNTY';
+const CLIENT_SECRET = 'W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP';
 const filter = 'for_ios';
 
 function callApi(url, options) {
@@ -28,8 +30,8 @@ class PixivApi {
       return Promise.reject(new Error('password required'));
     }
     const data = qs.stringify({
-      client_id: 'bYGKuGVw91e0NMfPGp44euvGt59s',
-      client_secret: 'HP3RmkgAmEGro0gn1x9ioawQE8WMfvLXDz3ZqxpK',
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
       get_secure_url: 1,
       grant_type: 'password',
       username,
@@ -72,6 +74,38 @@ class PixivApi {
 
   authInfo() {
     return this.auth;
+  }
+
+  refreshAccessToken(refreshToken) {
+    if ((!this.auth || !this.auth.refresh_token) && !refreshToken) {
+      return Promise.reject(new Error('refresh_token required'));
+    }
+    const data = qs.stringify({
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      get_secure_url: 1,
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken || this.auth.refresh_token,
+    });
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data,
+    };
+    return axios('https://oauth.secure.pixiv.net/auth/token', options)
+      .then(res => {
+        this.auth = res.data.response;
+        return res.data.response;
+      })
+      .catch(err => {
+        if (err.response) {
+          throw err.response.data;
+        } else {
+          throw err.message;
+        }
+      });
   }
 
   searchIllust(word, options) {

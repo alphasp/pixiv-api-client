@@ -29,6 +29,11 @@ test('auth', async t => {
   t.true(isObject(json));
 });
 
+test('refreshAccessToken', async t => {
+  const json = await t.context.pixiv.refreshAccessToken();
+  t.true(isObject(json));
+});
+
 test('userDetail', async t => {
   const json = await t.context.pixiv.userDetail(userId);
   t.true(isObject(json));
