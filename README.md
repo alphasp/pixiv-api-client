@@ -221,6 +221,9 @@ $ export PASSWORD=Pixiv password
 $ npm test
 ```
 
+## Related projects
+[pxview](https://github.com/alphasp/pxview) - Android/iOS client for Pixiv built in react-native
+
 ## License
 
 MIT
