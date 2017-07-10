@@ -159,6 +159,7 @@ class PixivApi {
     return this.requestUrl(`/v1/search/user?${queryString}`);
   }
 
+  // require auth
   searchAutoComplete(word) {
     if (!word) {
       return Promise.reject('word required');

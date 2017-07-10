@@ -65,6 +65,8 @@ Refresh access token with refreshToken
 - `word` - word to search (required)
 
 #### pixiv.searchAutoComplete(word)
+require auth
+
 - `word` - word to search (required)
 
 #### pixiv.userDetail(userId, options)
