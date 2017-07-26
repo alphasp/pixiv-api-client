@@ -22,6 +22,16 @@ function callApi(url, options) {
 }
 
 class PixivApi {
+  constructor() {
+    this.headers = {
+      'App-OS': 'ios',
+      'Accept-Language': 'en-us',
+      'App-OS-Version': '9.3.3',
+      'App-Version': '6.8.3',
+      'User-Agent': 'PixivIOSApp/6.8.3 (iOS 9.0; iPhone8,2)',
+    };
+  }
+
   login(username, password, rememberPassword) {
     if (!username) {
       return Promise.reject(new Error('username required'));
@@ -67,6 +77,7 @@ class PixivApi {
 
   logout() {
     this.auth = null;
+    this.headers.Authorization = undefined;
     this.username = null;
     this.password = null;
     return Promise.resolve();
@@ -106,6 +117,78 @@ class PixivApi {
           throw err.message;
         }
       });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  createProvisionalAccount(nickname) {
+    if (!nickname) {
+      return Promise.reject(new Error('nickname required'));
+    }
+    const data = qs.stringify({
+      ref: 'pixiv_ios_app_provisional_account',
+      user_name: nickname,
+    });
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Bearer WHDWCGnwWA2C8PRfQSdXJxjXp0G6ULRaRkkd6t5B6h8',
+      },
+      data,
+    };
+    return axios(
+      'https://accounts.pixiv.net/api/provisional-accounts/create',
+      options
+    )
+      .then(res => res.data.body)
+      .catch(err => {
+        if (err.response) {
+          throw err.response.data;
+        } else {
+          throw err.message;
+        }
+      });
+  }
+
+  // require auth
+  userState() {
+    return this.requestUrl(`/v1/user/me/state`);
+  }
+
+  editUserAccount(fields) {
+    if (!fields) {
+      return Promise.reject(new Error('fields required'));
+    }
+
+    const data = qs.stringify(
+      {
+        current_password: fields.currentPassword,
+        new_user_account: fields.pixivId, // changeable once per account
+        new_password: fields.newPassword, // required if current account is provisional
+        new_mail_address: fields.email,
+      },
+      { skipNulls: true }
+    );
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data,
+    };
+
+    return this.requestUrl(
+      'https://accounts.pixiv.net/api/account/edit',
+      options
+    );
+  }
+
+  sendAccountVerificationEmail() {
+    const options = {
+      method: 'POST',
+    };
+    return this.requestUrl('/v1/mail-authentication/send', options);
   }
 
   searchIllust(word, options) {
@@ -159,7 +242,6 @@ class PixivApi {
     return this.requestUrl(`/v1/search/user?${queryString}`);
   }
 
-  // require auth
   searchAutoComplete(word) {
     if (!word) {
       return Promise.reject('word required');
@@ -224,7 +306,6 @@ class PixivApi {
     return this.requestUrl(`/v1/user/bookmarks/illust?${queryString}`);
   }
 
-  // require auth
   userBookmarkIllustTags(options) {
     const queryString = qs.stringify(
       Object.assign(
@@ -237,7 +318,6 @@ class PixivApi {
     return this.requestUrl(`/v1/user/bookmark-tags/illust?${queryString}`);
   }
 
-  // require auth
   illustBookmarkDetail(id, options) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
@@ -252,6 +332,10 @@ class PixivApi {
       )
     );
     return this.requestUrl(`/v2/illust/bookmark/detail?${queryString}`);
+  }
+
+  illustWalkthrough() {
+    return this.requestUrl(`/v1/walkthrough/illusts`);
   }
 
   illustComments(id, options) {
@@ -318,7 +402,6 @@ class PixivApi {
     return this.requestUrl(`/v1/illust/new?${queryString}`);
   }
 
-  // require auth
   illustFollow(options) {
     const queryString = qs.stringify(
       Object.assign(
@@ -331,7 +414,6 @@ class PixivApi {
     return this.requestUrl(`/v2/illust/follow?${queryString}`);
   }
 
-  // require auth
   illustRecommended(options) {
     const queryString = qs.stringify(
       Object.assign(
@@ -371,12 +453,10 @@ class PixivApi {
     return this.requestUrl(`/v1/illust/ranking?${queryString}`);
   }
 
-  // require auth
   illustMyPixiv() {
     return this.requestUrl('/v2/illust/mypixiv');
   }
 
-  // require auth
   illustAddComment(id, comment) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
@@ -410,7 +490,6 @@ class PixivApi {
     return this.requestUrl(`/v1/trending-tags/illust?${queryString}`);
   }
 
-  // POST
   bookmarkIllust(id, restrict, tags) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
@@ -436,7 +515,6 @@ class PixivApi {
     return this.requestUrl('/v2/illust/bookmark/add', options);
   }
 
-  // POST
   unbookmarkIllust(id) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
@@ -454,7 +532,6 @@ class PixivApi {
     return this.requestUrl('/v1/illust/bookmark/delete', options);
   }
 
-  // POST
   followUser(id, restrict) {
     if (!id) {
       return Promise.reject(new Error('user_id required'));
@@ -476,7 +553,6 @@ class PixivApi {
     return this.requestUrl('/v1/user/follow/add', options);
   }
 
-  // POST
   unfollowUser(id) {
     if (!id) {
       return Promise.reject(new Error('user_id required'));
@@ -522,7 +598,6 @@ class PixivApi {
     return this.requestUrl(`/v1/illust/new?${queryString}`);
   }
 
-  // require auth
   novelRecommended(options) {
     const queryString = qs.stringify(
       Object.assign(
@@ -606,7 +681,6 @@ class PixivApi {
     return this.requestUrl(`/v1/user/follower?${queryString}`);
   }
 
-  // require auth
   userMyPixiv(id) {
     if (!id) {
       return Promise.reject('user_id required');
@@ -615,22 +689,16 @@ class PixivApi {
     return this.requestUrl(`/v1/user/mypixiv?${queryString}`);
   }
 
+  setLanguage(lang) {
+    this.headers['Accept-Language'] = lang;
+  }
+
   requestUrl(url, options) {
     if (!url) {
       return Promise.reject('Url cannot be empty');
     }
     options = options || {};
-    options.headers = Object.assign(
-      {
-        'App-OS': 'ios',
-        // 'Accept-Language': 'en-us',
-        // 'Accept-Language': 'ja-jp',
-        'App-OS-Version': '9.3.3',
-        'App-Version': '6.1.2',
-        'User-Agent': 'PixivIOSApp/6.1.2 (iOS 9.0; iPhone8,2)',
-      },
-      options.headers || {}
-    );
+    options.headers = Object.assign({}, this.headers, options.headers || {});
     if (this.auth && this.auth.access_token) {
       options.headers.Authorization = `Bearer ${this.auth.access_token}`;
     }
