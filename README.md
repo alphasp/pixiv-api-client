@@ -18,20 +18,13 @@ const PixivApi = require('pixiv-api-client');
 const pixiv = new PixivApi();
 
 const word = 'ラブライブ';
-//login and call api that require login
 pixiv.login('username', 'password').then(() => {
-  return pixiv.illustFollow().then(json => {
+  return pixiv.searchIllust(word).then(json => {
 	console.log(json);
-	return json;
+	return pixiv.requestUrl(json.next_url);
+  }).then(json => {
+	console.log(json); //next results
   });
-});
-
-//search illusts
-pixiv.searchIllust(word).then(json => {
-  console.log(json);
-  return pixiv.requestUrl(json.next_url);
-}).then(json => {
-  console.log(json); //next results
 });
 ```
 
@@ -54,7 +47,28 @@ Refresh access token with refreshToken
 
 - `refreshToken` - string (if not provided, will use refresh token that stored with api client after login)
 
+#### pixiv.createProvisionalAccount(nickName)
+
+- `nickName` - string
+
+#### pixiv.userState()
+require auth
+
+#### pixiv.editUserAccount(fields)
+require auth
+
+- `fields` - object
+  - pixivId
+  - email
+  - currentPassword
+  - newPassword
+
+#### pixiv.sendAccountVerificationEmail()  
+require auth
+
 #### pixiv.searchIllust(word, options)
+require auth
+
 - `word` - word to search (required)
 - `options` - object (optional)
   - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption` (default: `partial_match_for_tags`)
@@ -62,6 +76,8 @@ Refresh access token with refreshToken
   - `duration`: `within_last_day` | `within_last_week` | `within_last_month`
 
 #### pixiv.searchUser(word)
+require auth
+
 - `word` - word to search (required)
 
 #### pixiv.searchAutoComplete(word)
@@ -74,16 +90,22 @@ require auth
 - `options` - object (optional)
 
 #### pixiv.userIllusts(id, options) 
+require auth
+
 - `id` - Pixiv illust id
 - `options` - object (optional)
   - `type` - one of `illust` | `manga`
 
 #### pixiv.userBookmarksIllust(id, options)
+require auth
+
 - `id` - Pixiv illust id
 - `options` - object (optional)
   - `restrict` - one of `public` | `private` (default: `public`)
 
 #### pixiv.userBookmarkIllustTags(options)
+require auth
+
 - `options` - object (optional)
   - `restrict` - one of `public` | `private` (default: `public`)
 
@@ -94,18 +116,26 @@ require auth
 - `options` - object (optional)
 
 #### pixiv.illustComments(id, options)
+require auth
+
 - `id` - Pixiv illust id
 - `options` - object (optional)
 
 #### pixiv.illustRelated(id, options)
+require auth
+
 - `id` - Pixiv illust id
 - `options` - object (optional)
 
 #### pixiv.illustDetail(id, options)
+require auth
+
 - `id` - Pixiv illust id
 - `options` - object (optional)
 
 #### pixiv.illustNew(options)
+require auth
+
 - `options` - object (optional)
  
 #### pixiv.illustFollow(options)
@@ -123,7 +153,7 @@ require auth
 - `options` - object (optional)
 
 #### pixiv.illustRanking(options)
-mode `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` | `day_r18_manga` | `week_r18_manga` | `week_r18g_manga` require auth
+require auth
 
 - `options` - object
   - `date`: Date
@@ -139,6 +169,8 @@ require auth
 - `comment` - string
 
 #### pixiv.trendingTagsIllust(options)
+require auth
+
 - `options` - object (optional)
 
 #### pixiv.bookmarkIllust(id, restrict, tags)
@@ -154,12 +186,18 @@ require auth
 - `id` - Pixiv illust id
 
 #### pixiv.mangaRecommended(options)
+require auth
+
 - `options` - object (optional)
 
 #### pixiv.mangaNew(options)
+require auth
+
 - `options` - object (optional)
 
 #### pixiv.searchNovel(word, options)
+require auth
+
 - `word` - word to search (required)
 - `options` - object (optional)
   - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption` (default: `partial_match_for_tags`)
@@ -175,23 +213,31 @@ require auth
 - `options` - object (optional)
 
 #### pixiv.novelNew(options)
+require auth
+
 - `options` - object (optional)
 
 #### pixiv.userRecommended(options)
+require auth
+
 - `options` - object (optional)
 
 #### pixiv.userFollowing(id, options)
-restrict `private` require auth
+require auth
 
 - `id` - Pixiv user id
 - `options` - object (optional)
   - `restrict`: `public` | `private` (default: `public`)
 
 #### pixiv.userFollower(id, options)
+require auth
+
 - `id` - Pixiv user id
 - `options` - object (optional)
 
 #### pixiv.userMyPixiv(id)
+require auth
+
 - `id` - Pixiv user id
 
 #### pixiv.followUser(id, restrict)
@@ -204,6 +250,11 @@ require auth
 require auth
 
 - `id` - Pixiv user id
+
+#### pixiv.setLanguage(lang)
+set HTTP header Accept-Language for pixiv api request
+ 
+- `lang` - HTTP header Accept-Language
 
 #### pixiv.requestUrl(url, options)
 can be use to request pixiv endpoint or use for traversing results by passing next_url from result of other api such as `pixiv.searchIllust`
@@ -222,7 +273,7 @@ $ npm test
 ```
 
 ## Related projects
-[pxview](https://github.com/alphasp/pxview) - Android/iOS client for Pixiv built in react-native
+[PxView](https://github.com/alphasp/pxview) - Android/iOS client for Pixiv built in react-native
 
 ## License
 
