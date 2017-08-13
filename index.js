@@ -11,7 +11,7 @@ const CLIENT_SECRET = 'W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP';
 const filter = 'for_ios';
 
 function callApi(url, options) {
-  const finalUrl = /\b(http|https)/.test(url) ? url : BASE_URL + url;
+  const finalUrl = /^https?:\/\//i.test(url) ? url : BASE_URL + url;
   return axios(finalUrl, options).then(res => res.data).catch(err => {
     if (err.response) {
       throw err.response.data;
