@@ -168,6 +168,11 @@ require auth
 - `id` - Pixiv illust id
 - `comment` - string
 
+#### pixiv.ugoiraMetaData(id)
+require auth
+
+- `id` - Pixiv illust(ugoira) id
+
 #### pixiv.trendingTagsIllust(options)
 require auth
 

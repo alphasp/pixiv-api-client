@@ -4,6 +4,7 @@ import PixivApi from './';
 
 const userId = 67388;
 const illustId = 56317718;
+const ugoiraId = 44298524;
 const word = 'ラブライブ';
 const username = process.env.USER_NAME;
 const password = process.env.PASSWORD;
@@ -164,6 +165,11 @@ test('userRecommended', async t => {
   t.true(isObject(json));
 });
 
+test('ugoiraMetaData', async t => {
+  const json = await t.context.pixiv.ugoiraMetaData(ugoiraId);
+  t.true(isObject(json));
+});
+
 test.serial('bookmarkIllust', async t => {
   const json = await t.context.pixiv.bookmarkIllust(illustId);
   t.true(isObject(json));
@@ -224,6 +230,8 @@ test('error if params missing', async t => {
     t.context.pixiv.illustAddComment(illustId),
     /comment required/
   );
+
+  await t.throws(t.context.pixiv.ugoiraMetaData(), /illust_id required/);
 
   await t.throws(t.context.pixiv.bookmarkIllust(), /illust_id required/);
   await t.throws(t.context.pixiv.unbookmarkIllust(), /illust_id required/);

@@ -689,6 +689,14 @@ class PixivApi {
     return this.requestUrl(`/v1/user/mypixiv?${queryString}`);
   }
 
+  ugoiraMetaData(id) {
+    if (!id) {
+      return Promise.reject('illust_id required');
+    }
+    const queryString = qs.stringify({ illust_id: id });
+    return this.requestUrl(`/v1/ugoira/metadata?${queryString}`);
+  }
+
   setLanguage(lang) {
     this.headers['Accept-Language'] = lang;
   }
