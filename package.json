@@ -1,6 +1,6 @@
 {
   "name": "pixiv-api-client",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "description": "Promise based Pixiv API client for react native and node.js",
   "main": "index.js",
   "scripts": {
