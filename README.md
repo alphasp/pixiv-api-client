@@ -72,8 +72,28 @@ require auth
 - `word` - word to search (required)
 - `options` - object (optional)
   - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption` (default: `partial_match_for_tags`)
+  - `sort`: `date_desc` | `date_asc` | `popular_desc` (`popular_desc` only available for pixiv premium member) (default: `date_desc`)
+  - `start_date`: Date
+  - `end_date`: Date
+
+#### pixiv.searchIllustPopularPreview(word, options)
+require auth
+
+- `word` - word to search (required)
+- `options` - object (optional)
+  - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption` (default: `partial_match_for_tags`)
   - `sort`: `date_desc` | `date_asc` (default: `date_desc`)
-  - `duration`: `within_last_day` | `within_last_week` | `within_last_month`
+  - `start_date`: Date
+  - `end_date`: Date
+
+#### pixiv.searchIllustBookmarkRanges(word, options)
+require auth
+
+- `word` - word to search (required)
+- `options` - object (optional)
+  - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption` (default: `partial_match_for_tags`)
+  - `start_date`: Date
+  - `end_date`: Date
 
 #### pixiv.searchUser(word)
 require auth
@@ -86,20 +106,20 @@ require auth
 - `word` - word to search (required)
 
 #### pixiv.userDetail(userId, options)
-- `userId` - Pixiv user id
+- `userId` - Pixiv user id (required)
 - `options` - object (optional)
 
 #### pixiv.userIllusts(id, options) 
 require auth
 
-- `id` - Pixiv illust id
+- `id` - Pixiv user id (required)
 - `options` - object (optional)
   - `type` - one of `illust` | `manga`
 
 #### pixiv.userBookmarksIllust(id, options)
 require auth
 
-- `id` - Pixiv illust id
+- `id` - Pixiv user id (required)
 - `options` - object (optional)
   - `restrict` - one of `public` | `private` (default: `public`)
 
@@ -109,28 +129,101 @@ require auth
 - `options` - object (optional)
   - `restrict` - one of `public` | `private` (default: `public`)
 
+#### pixiv.userNovels(id, options) 
+require auth
+
+- `id` - Pixiv user id (required)
+- `options` - object (optional)
+ 
+#### pixiv.userBookmarksNovel(id, options)
+require auth
+
+- `id` - Pixiv user id
+- `options` - object (optional)
+  - `restrict` - one of `public` | `private` (default: `public`)
+
+#### pixiv.userBookmarkNovelTags(options)
+require auth
+
+- `options` - object (optional)
+  - `restrict` - one of `public` | `private` (default: `public`)
+
 #### pixiv.illustBookmarkDetail(id, options)
 require auth
 
-- `id` - Pixiv illust id
+- `id` - Pixiv illust id (required)
+- `options` - object (optional)
+
+#### pixiv.novelBookmarkDetail(id, options)
+require auth
+
+- `id` - Pixiv novel id (required)
 - `options` - object (optional)
 
 #### pixiv.illustComments(id, options)
 require auth
 
-- `id` - Pixiv illust id
+- `id` - Pixiv illust id (required)
+- `options` - object (optional)
+
+#### pixiv.illustCommentsV2(id, options)
+require auth
+
+- `id` - Pixiv illust id (required)
+- `options` - object (optional)
+
+#### pixiv.illustCommentReplies(id, options)
+require auth
+
+- `id` - Pixiv illust comment id (required)
+- `options` - object (optional)
+
+#### pixiv.novelComments(id, options)
+require auth
+
+- `id` - Pixiv novel id (required)
+- `options` - object (optional)
+
+#### pixiv.novelCommentsV2(id, options)
+require auth
+
+- `id` - Pixiv novel id (required)
+- `options` - object (optional)
+
+#### pixiv.novelCommentReplies(id, options)
+require auth
+
+- `id` - Pixiv novel comment id (required)
 - `options` - object (optional)
 
 #### pixiv.illustRelated(id, options)
 require auth
 
-- `id` - Pixiv illust id
+- `id` - Pixiv illust id (required)
 - `options` - object (optional)
 
 #### pixiv.illustDetail(id, options)
 require auth
 
-- `id` - Pixiv illust id
+- `id` - Pixiv illust id (required)
+- `options` - object (optional)
+
+#### pixiv.novelDetail(id, options)
+require auth
+
+- `id` - Pixiv novel id (required)
+- `options` - object (optional)
+
+#### pixiv.novelText(id, options)
+require auth
+
+- `id` - Pixiv novel id (required)
+- `options` - object (optional)
+
+#### pixiv.novelSeries(id, options)
+require auth
+
+- `id` - Pixiv novel series id (required)
 - `options` - object (optional)
 
 #### pixiv.illustNew(options)
@@ -144,12 +237,15 @@ require auth
 - `options` - object (optional)
   - `restrict` - one of `all` | `public` | `private`  (default: `all`)
 
-#### pixiv.illustRecommended(options)
+#### pixiv.novelFollow(options)
 require auth
 
 - `options` - object (optional)
+  - `restrict` - one of `all` | `public` | `private`  (default: `all`)
 
-#### pixiv.illustRecommendedPublic(options)
+#### pixiv.illustRecommended(options)
+require auth
+
 - `options` - object (optional)
 
 #### pixiv.illustRanking(options)
@@ -159,21 +255,44 @@ require auth
   - `date`: Date
   - `mode`: `day` | `week` | `month` | `day_male` | `day_female` | `week_original` | `week_rookie` | `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g`| `day_manga` | `week_manga` | `month_manga` | `week_rookie_manga` | `day_r18_manga` | `week_r18_manga` | `week_r18g_manga` (default: `day`)
 
+#### pixiv.novelRanking(options)
+require auth
+
+- `options` - object
+  - `date`: Date
+  - `mode`: `day` | `week` | `month` | `day_male` | `day_female` | `week_original` | `week_rookie` | `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g`| `day_manga` | `week_manga` | `month_manga` | `week_rookie_manga` | `day_r18_manga` | `week_r18_manga` | `week_r18g_manga` (default: `day`)
+ 
 #### pixiv.illustMyPixiv()
 require auth
 
-#### pixiv.illustAddComment(id, comment)
+#### pixiv.novelMyPixiv()
 require auth
 
-- `id` - Pixiv illust id
-- `comment` - string
+#### pixiv.illustAddComment(id, comment, parentCommentId)
+require auth
+
+- `id` - Pixiv illust id (required)
+- `comment` - string (required)
+- `parentCommentId` - Pixiv comment id (optional, to reply to comment`
+
+#### pixiv.novelAddComment(id, comment, parentCommentId)
+require auth
+
+- `id` - Pixiv novel id (required)
+- `comment` - string (required)
+- `parentCommentId` - Pixiv comment id (optional, to reply to comment`
 
 #### pixiv.ugoiraMetaData(id)
 require auth
 
-- `id` - Pixiv illust(ugoira) id
+- `id` - Pixiv illust(ugoira) id (required)
 
 #### pixiv.trendingTagsIllust(options)
+require auth
+
+- `options` - object (optional)
+
+#### pixiv.trendingTagsNovel(options)
 require auth
 
 - `options` - object (optional)
@@ -181,14 +300,26 @@ require auth
 #### pixiv.bookmarkIllust(id, restrict, tags)
 require auth
 
-- `id` - Pixiv illust id
+- `id` - Pixiv illust id (required)
 - `restrict` - one of `public` | `private` (default: `public`)
 - `tags` - array of string (optional)
 
 #### pixiv.unbookmarkIllust(id)
 require auth
 
-- `id` - Pixiv illust id
+- `id` - Pixiv illust id (required)
+
+#### pixiv.bookmarkNovel(id, restrict, tags)
+require auth
+
+- `id` - Pixiv novel id (required)
+- `restrict` - one of `public` | `private` (default: `public`)
+- `tags` - array of string (optional)
+
+#### pixiv.unbookmarkNovel(id)
+require auth
+
+- `id` - Pixiv novel id (required)
 
 #### pixiv.mangaRecommended(options)
 require auth
@@ -205,22 +336,46 @@ require auth
 
 - `word` - word to search (required)
 - `options` - object (optional)
-  - `search_target`: `partial_match_for_tags` | `exact_match_for_tags` | `title_and_caption` (default: `partial_match_for_tags`)
-  - `sort`: `date_desc` | `date_asc` (default: `date_desc`)
-  - `duration`: `within_last_day` | `within_last_week` | `within_last_month`
- 
+  - `search_target`: `partial_match_for_tags` | `text` | `keyword` (default: `partial_match_for_tags`)
+  - `sort`: `date_desc` | `date_asc` | `popular_desc` (`popular_desc` only available for pixiv premium member) (default: `date_desc`)
+  - `start_date`: Date
+  - `end_date`: Date
+
+#### pixiv.searchNovelPopularPreview(word, options)
+require auth
+
+- `word` - word to search (required)
+- `options` - object (optional)
+  - `search_target`: `partial_match_for_tags` | `text` | `keyword` (default: `partial_match_for_tags`)
+  - `sort`: `date_desc` | `date_asc` | `popular_desc` (`popular_desc` only available for pixiv premium member) (default: `date_desc`)
+  - `start_date`: Date
+  - `end_date`: Date
+
+#### pixiv.searchNovelBookmarkRanges(word, options)
+require auth
+
+- `word` - word to search (required)
+- `options` - object (optional)
+  - `search_target`: `partial_match_for_tags` | `text` | `keyword` (default: `partial_match_for_tags`)
+  - `start_date`: Date
+  - `end_date`: Date
+   
 #### pixiv.novelRecommended(options)
 require auth
 
-- `options` - object (optional)
-
-#### pixiv.novelRecommendedPublic(options)
 - `options` - object (optional)
 
 #### pixiv.novelNew(options)
 require auth
 
 - `options` - object (optional)
+
+#### pixiv.novelRanking(options)
+require auth
+
+- `options` - object
+  - `date`: Date
+  - `mode`: `day` | `week` | `day_male` | `day_female` | `week_rookie` | `day_r18` | `day_male_r18` | `day_female_r18` | `week_r18` | `week_r18g` (default: `day`)
 
 #### pixiv.userRecommended(options)
 require auth
@@ -230,31 +385,31 @@ require auth
 #### pixiv.userFollowing(id, options)
 require auth
 
-- `id` - Pixiv user id
+- `id` - Pixiv user id (required)
 - `options` - object (optional)
   - `restrict`: `public` | `private` (default: `public`)
 
 #### pixiv.userFollower(id, options)
 require auth
 
-- `id` - Pixiv user id
+- `id` - Pixiv user id (required)
 - `options` - object (optional)
 
 #### pixiv.userMyPixiv(id)
 require auth
 
-- `id` - Pixiv user id
+- `id` - Pixiv user id (required)
 
 #### pixiv.followUser(id, restrict)
 require auth
 
-- `id` - Pixiv user id
+- `id` - Pixiv user id (required)
 - `restrict` - one of `public` | `private` (default: `public`)
 
 #### pixiv.unfollowUser(id)
 require auth
 
-- `id` - Pixiv user id
+- `id` - Pixiv user id (required)
 
 #### pixiv.setLanguage(lang)
 set HTTP header Accept-Language for pixiv api request
