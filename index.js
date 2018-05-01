@@ -76,9 +76,9 @@ class PixivApi {
 
   logout() {
     this.auth = null;
-    this.headers.Authorization = undefined;
     this.username = null;
     this.password = null;
+    delete this.headers.Authorization;
     return Promise.resolve();
   }
 
