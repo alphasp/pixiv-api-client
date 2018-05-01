@@ -27,8 +27,8 @@ class PixivApi {
       'App-OS': 'ios',
       'Accept-Language': 'en-us',
       'App-OS-Version': '9.3.3',
-      'App-Version': '6.8.3',
-      'User-Agent': 'PixivIOSApp/6.8.3 (iOS 9.0; iPhone8,2)',
+      'App-Version': '7.1.11',
+      'User-Agent': 'PixivIOSApp/7.1.11 (iOS 9.0; iPhone8,2)',
     };
   }
 
@@ -46,7 +46,6 @@ class PixivApi {
       grant_type: 'password',
       username,
       password,
-      device_token: 'pixiv',
     });
     const options = {
       method: 'POST',
@@ -210,6 +209,24 @@ class PixivApi {
     return this.requestUrl(`/v1/search/illust?${queryString}`);
   }
 
+  searchIllustPopularPreview(word, options) {
+    if (!word) {
+      return Promise.reject(new Error('word required'));
+    }
+
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          word,
+          search_target: 'partial_match_for_tags',
+          filter,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/search/popular-preview/illust?${queryString}`);
+  }
+
   searchNovel(word, options) {
     if (!word) {
       return Promise.reject(new Error('word required'));
@@ -227,6 +244,58 @@ class PixivApi {
       )
     );
     return this.requestUrl(`/v1/search/novel?${queryString}`);
+  }
+
+  searchNovelPopularPreview(word, options) {
+    if (!word) {
+      return Promise.reject(new Error('word required'));
+    }
+
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          word,
+          search_target: 'partial_match_for_tags',
+          filter,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/search/popular-preview/novel?${queryString}`);
+  }
+
+  searchIllustBookmarkRanges(word, options) {
+    if (!word) {
+      return Promise.reject('word required');
+    }
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          word,
+          search_target: 'partial_match_for_tags',
+          filter,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/search/bookmark-ranges/illust?${queryString}`);
+  }
+
+  searchNovelBookmarkRanges(word, options) {
+    if (!word) {
+      return Promise.reject('word required');
+    }
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          word,
+          search_target: 'partial_match_for_tags',
+          filter,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/search/bookmark-ranges/novel?${queryString}`);
   }
 
   searchUser(word) {
@@ -288,6 +357,23 @@ class PixivApi {
     return this.requestUrl(`/v1/user/illusts?${queryString}`);
   }
 
+  userNovels(id, options) {
+    if (!id) {
+      return Promise.reject(new Error('user_id required'));
+    }
+
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          user_id: id,
+          filter,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/user/novels?${queryString}`);
+  }
+
   userBookmarksIllust(id, options) {
     if (!id) {
       return Promise.reject(new Error('user_id required'));
@@ -334,6 +420,36 @@ class PixivApi {
     return this.requestUrl(`/v2/illust/bookmark/detail?${queryString}`);
   }
 
+  userBookmarksNovel(id, options) {
+    if (!id) {
+      return Promise.reject(new Error('user_id required'));
+    }
+
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          user_id: id,
+          restrict: 'public',
+          filter,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/user/bookmarks/novel?${queryString}`);
+  }
+
+  userBookmarkNovelTags(options) {
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          restrict: 'public',
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/user/bookmark-tags/novel?${queryString}`);
+  }
+
   illustWalkthrough() {
     return this.requestUrl(`/v1/walkthrough/illusts`);
   }
@@ -353,6 +469,30 @@ class PixivApi {
       )
     );
     return this.requestUrl(`/v1/illust/comments?${queryString}`);
+  }
+
+  illustCommentsV2(id, options) {
+    if (!id) {
+      return Promise.reject(new Error('illust_id required'));
+    }
+
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          illust_id: id,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v2/illust/comments?${queryString}`);
+  }
+
+  illustCommentReplies(id) {
+    if (!id) {
+      return Promise.reject(new Error('comment_id required'));
+    }
+    const queryString = qs.stringify({ comment_id: id });
+    return this.requestUrl(`/v1/illust/comment/replies?${queryString}`);
   }
 
   illustRelated(id, options) {
@@ -457,7 +597,7 @@ class PixivApi {
     return this.requestUrl('/v2/illust/mypixiv');
   }
 
-  illustAddComment(id, comment) {
+  illustAddComment(id, comment, parentCommentId) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
     }
@@ -467,6 +607,7 @@ class PixivApi {
     const data = qs.stringify({
       illust_id: id,
       comment,
+      parent_comment_id: parentCommentId,
     });
     const options = {
       method: 'POST',
@@ -476,6 +617,28 @@ class PixivApi {
       data,
     };
     return this.requestUrl(`/v1/illust/comment/add`, options);
+  }
+
+  novelAddComment(id, comment, parentCommentId) {
+    if (!id) {
+      return Promise.reject(new Error('novel_id required'));
+    }
+    if (!comment) {
+      return Promise.reject(new Error('comment required'));
+    }
+    const data = qs.stringify({
+      novel_id: id,
+      comment,
+      parent_comment_id: parentCommentId,
+    });
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data,
+    };
+    return this.requestUrl(`/v1/novel/comment/add`, options);
   }
 
   trendingTagsIllust(options) {
@@ -488,6 +651,18 @@ class PixivApi {
       )
     );
     return this.requestUrl(`/v1/trending-tags/illust?${queryString}`);
+  }
+
+  trendingTagsNovel(options) {
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          filter,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/trending-tags/novel?${queryString}`);
   }
 
   bookmarkIllust(id, restrict, tags) {
@@ -530,6 +705,48 @@ class PixivApi {
       data,
     };
     return this.requestUrl('/v1/illust/bookmark/delete', options);
+  }
+
+  bookmarkNovel(id, restrict, tags) {
+    if (!id) {
+      return Promise.reject(new Error('novel_id required'));
+    }
+    if (restrict && ['public', 'private'].indexOf(restrict) === -1) {
+      return Promise.reject(new Error('invalid restrict value'));
+    }
+    if (tags && !Array.isArray(tags)) {
+      return Promise.reject(new Error('invalid tags value'));
+    }
+    const data = qs.stringify({
+      novel_id: id,
+      restrict: restrict || 'public',
+      tags: tags && tags.length ? tags : undefined,
+    });
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data,
+    };
+    return this.requestUrl('/v2/novel/bookmark/add', options);
+  }
+
+  unbookmarkNovel(id) {
+    if (!id) {
+      return Promise.reject(new Error('novel_id required'));
+    }
+    const data = qs.stringify({
+      novel_id: id,
+    });
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data,
+    };
+    return this.requestUrl('/v1/novel/bookmark/delete', options);
   }
 
   followUser(id, restrict) {
@@ -627,6 +844,118 @@ class PixivApi {
   novelNew(options) {
     const queryString = qs.stringify(options);
     return this.requestUrl(`/v1/novel/new?${queryString}`);
+  }
+
+  novelComments(id, options) {
+    if (!id) {
+      return Promise.reject(new Error('novel_id required'));
+    }
+
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          novel_id: id,
+          include_total_comments: true,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/novel/comments?${queryString}`);
+  }
+
+  novelCommentsV2(id, options) {
+    if (!id) {
+      return Promise.reject(new Error('novel_id required'));
+    }
+
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          novel_id: id,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v2/novel/comments?${queryString}`);
+  }
+
+  novelCommentReplies(id) {
+    if (!id) {
+      return Promise.reject(new Error('comment_id required'));
+    }
+    const queryString = qs.stringify({ comment_id: id });
+    return this.requestUrl(`/v1/novel/comment/replies?${queryString}`);
+  }
+
+  novelSeries(id) {
+    if (!id) {
+      return Promise.reject(new Error('series_id required'));
+    }
+
+    const queryString = qs.stringify({ series_id: id });
+    return this.requestUrl(`/v1/novel/series?${queryString}`);
+  }
+
+  novelDetail(id) {
+    if (!id) {
+      return Promise.reject(new Error('novel_id required'));
+    }
+
+    const queryString = qs.stringify({ novel_id: id });
+    return this.requestUrl(`/v2/novel/detail?${queryString}`);
+  }
+
+  novelText(id) {
+    if (!id) {
+      return Promise.reject(new Error('novel_id required'));
+    }
+
+    const queryString = qs.stringify({ novel_id: id });
+    return this.requestUrl(`/v1/novel/text?${queryString}`);
+  }
+
+  novelFollow(options) {
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          restrict: 'all',
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/novel/follow?${queryString}`);
+  }
+
+  novelMyPixiv() {
+    return this.requestUrl('/v1/novel/mypixiv');
+  }
+
+  novelRanking(options) {
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          mode: 'day',
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v1/novel/ranking?${queryString}`);
+  }
+
+  novelBookmarkDetail(id, options) {
+    if (!id) {
+      return Promise.reject(new Error('novel_id required'));
+    }
+
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          novel_id: id,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v2/novel/bookmark/detail?${queryString}`);
   }
 
   userRecommended(options) {
