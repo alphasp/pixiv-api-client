@@ -567,19 +567,6 @@ class PixivApi {
     return this.requestUrl(`/v1/illust/recommended?${queryString}`);
   }
 
-  illustRecommendedPublic(options) {
-    const queryString = qs.stringify(
-      Object.assign(
-        {
-          include_ranking_illusts: true,
-          filter,
-        },
-        options
-      )
-    );
-    return this.requestUrl(`/v1/illust/recommended-nologin?${queryString}`);
-  }
-
   illustRanking(options) {
     const queryString = qs.stringify(
       Object.assign(
@@ -826,19 +813,6 @@ class PixivApi {
       )
     );
     return this.requestUrl(`/v1/novel/recommended?${queryString}`);
-  }
-
-  novelRecommendedPublic(options) {
-    const queryString = qs.stringify(
-      Object.assign(
-        {
-          include_ranking_novels: true,
-          filter,
-        },
-        options
-      )
-    );
-    return this.requestUrl(`/v1/novel/recommended-nologin?${queryString}`);
   }
 
   novelNew(options) {
