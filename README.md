@@ -47,7 +47,7 @@ Refresh access token with refreshToken
 
 - `refreshToken` - string (if not provided, will use refresh token that stored with api client after login)
 
-#### pixiv.createProvisionalAccount(nickName)
+#### pixiv.createProvisionalAccount(nickName) (*No longer working*)
 
 - `nickName` - string
 
@@ -102,6 +102,11 @@ require auth
 
 #### pixiv.searchAutoComplete(word)
 require auth
+
+- `word` - word to search (required)
+
+#### pixiv.searchAutoCompleteV2(word)
+require auth 
 
 - `word` - word to search (required)
 
