@@ -12,13 +12,15 @@ const filter = 'for_ios';
 
 function callApi(url, options) {
   const finalUrl = /^https?:\/\//i.test(url) ? url : BASE_URL + url;
-  return axios(finalUrl, options).then(res => res.data).catch(err => {
-    if (err.response) {
-      throw err.response.data;
-    } else {
-      throw err.message;
-    }
-  });
+  return axios(finalUrl, options)
+    .then(res => res.data)
+    .catch(err => {
+      if (err.response) {
+        throw err.response.data;
+      } else {
+        throw err.message;
+      }
+    });
 }
 
 class PixivApi {
@@ -27,8 +29,8 @@ class PixivApi {
       'App-OS': 'ios',
       'Accept-Language': 'en-us',
       'App-OS-Version': '12.0.1',
-      'App-Version': '7.2.2',
-      'User-Agent': 'PixivIOSApp/7.2.2 (iOS 12.0.1; iPhone8,2)',
+      'App-Version': '7.6.2',
+      'User-Agent': 'PixivIOSApp/7.6.2 (iOS 12.0.1; iPhone8,2)',
     };
   }
 
@@ -321,6 +323,18 @@ class PixivApi {
       })
     );
     return this.requestUrl(`/v1/search/autocomplete?${queryString}`);
+  }
+
+  searchAutoCompleteV2(word) {
+    if (!word) {
+      return Promise.reject('word required');
+    }
+    const queryString = qs.stringify(
+      Object.assign({
+        word,
+      })
+    );
+    return this.requestUrl(`/v2/search/autocomplete?${queryString}`);
   }
 
   userDetail(id, options) {
@@ -1013,17 +1027,21 @@ class PixivApi {
     if (this.auth && this.auth.access_token) {
       options.headers.Authorization = `Bearer ${this.auth.access_token}`;
     }
-    return callApi(url, options).then(json => json).catch(err => {
-      if (this.rememberPassword) {
-        if (this.username && this.password) {
-          return this.login(this.username, this.password).then(() => {
-            options.headers.Authorization = `Bearer ${this.auth.access_token}`;
-            return callApi(url, options);
-          });
+    return callApi(url, options)
+      .then(json => json)
+      .catch(err => {
+        if (this.rememberPassword) {
+          if (this.username && this.password) {
+            return this.login(this.username, this.password).then(() => {
+              options.headers.Authorization = `Bearer ${
+                this.auth.access_token
+              }`;
+              return callApi(url, options);
+            });
+          }
         }
-      }
-      throw err;
-    });
+        throw err;
+      });
   }
 }
 
