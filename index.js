@@ -39,7 +39,7 @@ class PixivApi {
   }
 
   getDefaultHeaders() {
-    const datetime = moment().format('YYYY-MM-DDTHH:mm:ss+00:00');
+    const datetime = moment().format();
     return Object.assign({}, this.headers, {
       'X-Client-Time': datetime,
       'X-Client-Hash': md5(`${datetime}${HASH_SECRET}`),
