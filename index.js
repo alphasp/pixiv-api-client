@@ -5,6 +5,7 @@
 const axios = require('axios');
 const qs = require('qs');
 const md5 = require('blueimp-md5');
+const moment = require('moment');
 
 const BASE_URL = 'https://app-api.pixiv.net';
 const CLIENT_ID = 'KzEZED7aC0vird8jWyHM38mXjNTY';
@@ -38,7 +39,7 @@ class PixivApi {
   }
 
   getDefaultHeaders() {
-    const datetime = new Date().toISOString();
+    const datetime = moment().format('YYYY-MM-DDTHH:mm:ss+00:00');
     return Object.assign({}, this.headers, {
       'X-Client-Time': datetime,
       'X-Client-Hash': md5(`${datetime}${HASH_SECRET}`),
@@ -1049,7 +1050,9 @@ class PixivApi {
         if (this.rememberPassword) {
           if (this.username && this.password) {
             return this.login(this.username, this.password).then(() => {
-              options.headers.Authorization = `Bearer ${this.auth.access_token}`;
+              options.headers.Authorization = `Bearer ${
+                this.auth.access_token
+              }`;
               return callApi(url, options);
             });
           }
