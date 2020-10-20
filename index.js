@@ -32,9 +32,9 @@ class PixivApi {
     this.headers = {
       'App-OS': 'ios',
       'Accept-Language': 'en-us',
-      'App-OS-Version': '12.0.1',
-      'App-Version': '7.6.2',
-      'User-Agent': 'PixivIOSApp/7.6.2 (iOS 12.0.1; iPhone8,2)',
+      'App-OS-Version': '14.0',
+      'App-Version': '7.9.4',
+      'User-Agent': 'PixivIOSApp/7.9.4 (iOS 14.0; iPhone8,2)',
     };
   }
 
