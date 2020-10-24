@@ -30,7 +30,9 @@ pixiv.login('username', 'password').then(() => {
 
 ## API
 
-### PixivApi()
+### PixivApi(options)
+- `options` - object (optional)
+  - `headers`: custom headers for request
 <hr>
 
 #### pixiv.login(username, password, rememberPassword)
