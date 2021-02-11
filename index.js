@@ -8,8 +8,8 @@ const md5 = require('blueimp-md5');
 const moment = require('moment');
 
 const BASE_URL = 'https://app-api.pixiv.net';
-const CLIENT_ID = 'KzEZED7aC0vird8jWyHM38mXjNTY';
-const CLIENT_SECRET = 'W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP';
+const CLIENT_ID = 'MOBrBDS8blbauoSck0ZfDbtuzpyT';
+const CLIENT_SECRET = 'lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj';
 const HASH_SECRET =
   '28c1fdd170a5204386cb1313c7077b34f83e4aaf4aa829ce78c231e05b0bae2c';
 
@@ -32,8 +32,8 @@ class PixivApi {
       'App-OS': 'android',
       'Accept-Language': 'en-us',
       'App-OS-Version': '9.0',
-      'App-Version': '5.0.155',
-      'User-Agent': 'PixivAndroidApp/5.0.155 (Android 9.0; Pixel 3)',
+      'App-Version': '5.0.234',
+      'User-Agent': 'PixivAndroidApp/5.0.234  (Android 9.0; Pixel 3)',
     };
     if (options && options.headers) {
       this.headers = Object.assign({}, this.headers, options.headers);
@@ -80,6 +80,37 @@ class PixivApi {
           this.username = username;
           this.password = password;
         }
+        return res.data.response;
+      })
+      .catch(err => {
+        if (err.response) {
+          throw err.response.data;
+        } else {
+          throw err.message;
+        }
+      });
+  }
+
+  tokenRequest(code, codeVerifier) {
+    const data = qs.stringify({
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      code,
+      code_verifier: codeVerifier,
+      redirect_uri: `${BASE_URL}/web/v1/users/auth/pixiv/callback`,
+      grant_type: 'authorization_code',
+      include_policy: true,
+    });
+    const options = {
+      method: 'POST',
+      headers: Object.assign(this.getDefaultHeaders(), {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }),
+      data,
+    };
+    return axios('https://oauth.secure.pixiv.net/auth/token', options)
+      .then(res => {
+        this.auth = res.data.response;
         return res.data.response;
       })
       .catch(err => {
