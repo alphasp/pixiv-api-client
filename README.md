@@ -1,8 +1,11 @@
 # Pixiv API Client
-[![Build Status](https://travis-ci.org/alphasp/pixiv-api-client.svg?branch=master)](https://travis-ci.org/alphasp/pixiv-api-client)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 Promise based Pixiv API client for node.js and react native 
+
+
+## Note
+Since 8th Feb 2021, `login` api no longer working, pixiv now require authenticate with oauth 2.0. You will need to either use tool like wireshark/charles to sniff refresh token and auth with `refreshAccessToken` or follow oauth 2.0 flow which will only work on authorized url or app.
 
 
 ## Install
@@ -18,7 +21,7 @@ const PixivApi = require('pixiv-api-client');
 const pixiv = new PixivApi();
 
 const word = 'ラブライブ';
-pixiv.login('username', 'password').then(() => {
+pixiv.tokenRequest('code', 'codeVerfier').then(() => {
   return pixiv.searchIllust(word).then(json => {
 	console.log(json);
 	return pixiv.requestUrl(json.next_url);
@@ -33,9 +36,13 @@ pixiv.login('username', 'password').then(() => {
 ### PixivApi(options)
 - `options` - object (optional)
   - `headers`: custom headers for request
-<hr>
 
-#### pixiv.login(username, password, rememberPassword)
+#### pixiv.tokenRequest(code, codeVerifier)
+- `code` - Authorization code return by pixiv auth server through PKCE flow
+- `codeVerifier` - Code verifier generated from PKCE challenge
+
+
+#### [Deprecated] pixiv.login(username, password, rememberPassword)
 Api client will try once to relogin again on error if rememberPassword is set to `true`
 
 - `username` - Pixiv username
@@ -49,7 +56,7 @@ Refresh access token with refreshToken
 
 - `refreshToken` - string (if not provided, will use refresh token that stored with api client after login)
 
-#### pixiv.createProvisionalAccount(nickName) (*No longer working*)
+#### [Deprecated] pixiv.createProvisionalAccount(nickName)
 
 - `nickName` - string
 
