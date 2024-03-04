@@ -8,20 +8,14 @@ const ugoiraId = 44298524;
 const novelId = 9545577;
 const novelSeriesId = 941585;
 const word = 'ラブライブ';
-const username = process.env.USER_NAME;
-const password = process.env.PASSWORD;
+const refreshToken = process.env.refresh_token;
 
 test.beforeEach('new PixivApi()', async t => {
   const pixiv = new PixivApi();
   t.context.pixiv = pixiv;
-  const json = await t.context.pixiv.login(username, password);
+  const json = await t.context.pixiv.refreshAccessToken(refreshToken);
   t.true(isObject(json));
 });
-
-// test('login', async (t) => {
-//   const json = await t.context.pixiv.login(username, password);
-//   t.true(isObject(json));
-// });
 
 test('expose a constructor', t => {
   t.true(typeof PixivApi === 'function');
@@ -114,6 +108,11 @@ test('novelDetail', async t => {
 
 test('novelText', async t => {
   const json = await t.context.pixiv.novelText(novelId);
+  t.true(isObject(json));
+});
+
+test('novelWebview', async t => {
+  const json = await t.context.pixiv.novelWebview(novelId);
   t.true(isObject(json));
 });
 
@@ -283,8 +282,6 @@ test.serial('logout', async t => {
 });
 
 test('error if params missing', async t => {
-  await t.throws(t.context.pixiv.login(), /username required/);
-  await t.throws(t.context.pixiv.login(username), /password required/);
   await t.throws(t.context.pixiv.userDetail(), /user_id required/);
   await t.throws(t.context.pixiv.userIllusts(), /user_id required/);
   await t.throws(t.context.pixiv.userNovels(), /user_id required/);
@@ -311,6 +308,7 @@ test('error if params missing', async t => {
   await t.throws(t.context.pixiv.novelCommentsV2(), /novel_id required/);
   await t.throws(t.context.pixiv.novelDetail(), /novel_id required/);
   await t.throws(t.context.pixiv.novelSeries(), /series_id required/);
+  await t.throws(t.context.pixiv.novelWebview(), /novel_id required/);
   await t.throws(t.context.pixiv.novelText(), /novel_id required/);
   await t.throws(t.context.pixiv.novelAddComment(), /novel_id required/);
 
