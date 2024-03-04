@@ -228,11 +228,17 @@ require auth
 - `id` - Pixiv novel id (required)
 - `options` - object (optional)
 
-#### pixiv.novelText(id, options)
+#### [Deprecated] pixiv.novelText(id, options)
 require auth
 
 - `id` - Pixiv novel id (required)
 - `options` - object (optional)
+
+#### pixiv.novelWebview(id, raw)
+require auth
+
+- `id` - Pixiv novel id (required)
+- `raw` - boolean (optional, default is false) Set to true to return return raw response string or false to return novel object
 
 #### pixiv.novelSeries(id, options)
 require auth
