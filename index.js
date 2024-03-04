@@ -906,13 +906,38 @@ class PixivApi {
     return this.requestUrl(`/v2/novel/detail?${queryString}`);
   }
 
+  // deprecated, use novelWebview
   novelText(id) {
+    // if (!id) {
+    //   return Promise.reject(new Error('novel_id required'));
+    // }
+    // const queryString = qs.stringify({ novel_id: id });
+    // return this.requestUrl(`/v1/novel/text?${queryString}`);
+    return this.novelWebview(id, false);
+  }
+
+  async novelWebview(id, raw) {
     if (!id) {
       return Promise.reject(new Error('novel_id required'));
     }
-
-    const queryString = qs.stringify({ novel_id: id });
-    return this.requestUrl(`/v1/novel/text?${queryString}`);
+    const queryString = qs.stringify({ id, viewer_version: '20221031_ai' });
+    const response = await this.requestUrl(`/webview/v2/novel?${queryString}`);
+    if (raw) {
+      return response;
+    }
+    // parse novel key value from json string
+    try {
+      const regex = /novel:\s({.+}),/;
+      const match = response.match(regex);
+      if (match) {
+        const novelKeyValue = match[1];
+        const novelObject = JSON.parse(novelKeyValue);
+        return novelObject;
+      }
+    } catch (err) {
+      return err;
+    }
+    return '';
   }
 
   novelFollow(options) {
