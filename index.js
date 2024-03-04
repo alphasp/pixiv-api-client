@@ -1044,6 +1044,27 @@ class PixivApi {
     return this.requestUrl(`/v1/ugoira/metadata?${queryString}`);
   }
 
+  aiShowSettings() {
+    return this.requestUrl('/v1/user/ai-show-settings');
+  }
+
+  toggleAIShowSettings(isToggle) {
+    if (isToggle === undefined) {
+      return Promise.reject(new Error('is_toggle required'));
+    }
+    const data = qs.stringify({
+      show_ai: isToggle,
+    });
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data,
+    };
+    return this.requestUrl('/v1/user/ai-show-settings/edit', options);
+  }
+
   setLanguage(lang) {
     this.headers['Accept-Language'] = lang;
   }
