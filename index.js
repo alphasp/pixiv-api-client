@@ -538,6 +538,14 @@ class PixivApi {
     return this.requestUrl(`/v1/illust/comment/replies?${queryString}`);
   }
 
+  illustCommentRepliesV2(id) {
+    if (!id) {
+      return Promise.reject(new Error('comment_id required'));
+    }
+    const queryString = qs.stringify({ comment_id: id });
+    return this.requestUrl(`/v2/illust/comment/replies?${queryString}`);
+  }
+
   illustRelated(id, options) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
@@ -874,12 +882,36 @@ class PixivApi {
     return this.requestUrl(`/v2/novel/comments?${queryString}`);
   }
 
+  novelCommentsV3(id, options) {
+    if (!id) {
+      return Promise.reject(new Error('novel_id required'));
+    }
+
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          novel_id: id,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v3/novel/comments?${queryString}`);
+  }
+
   novelCommentReplies(id) {
     if (!id) {
       return Promise.reject(new Error('comment_id required'));
     }
     const queryString = qs.stringify({ comment_id: id });
     return this.requestUrl(`/v1/novel/comment/replies?${queryString}`);
+  }
+
+  novelCommentRepliesV2(id) {
+    if (!id) {
+      return Promise.reject(new Error('comment_id required'));
+    }
+    const queryString = qs.stringify({ comment_id: id });
+    return this.requestUrl(`/v2/novel/comment/replies?${queryString}`);
   }
 
   novelSeries(id) {
