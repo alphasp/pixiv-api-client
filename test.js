@@ -81,6 +81,11 @@ test('illustCommentsV2', async t => {
   t.true(isObject(json));
 });
 
+test('illustCommentsV3', async t => {
+  const json = await t.context.pixiv.illustCommentsV3(illustId);
+  t.true(isObject(json));
+});
+
 test('novelComments', async t => {
   const json = await t.context.pixiv.novelComments(novelId);
   t.true(isObject(json));
@@ -88,6 +93,11 @@ test('novelComments', async t => {
 
 test('novelCommentsV2', async t => {
   const json = await t.context.pixiv.novelCommentsV2(novelId);
+  t.true(isObject(json));
+});
+
+test('novelCommentsV3', async t => {
+  const json = await t.context.pixiv.novelCommentsV3(novelId);
   t.true(isObject(json));
 });
 
@@ -201,8 +211,8 @@ test('searchUser', async t => {
   t.true(isObject(json));
 });
 
-test('searchAutoComplete', async t => {
-  const json = await t.context.pixiv.searchAutoComplete(word);
+test('searchAutoCompleteV2', async t => {
+  const json = await t.context.pixiv.searchAutoCompleteV2(word);
   t.true(isObject(json));
 });
 
@@ -293,8 +303,7 @@ test('error if params missing', async t => {
   await t.throws(t.context.pixiv.userMyPixiv(), /user_id required/);
 
   await t.throws(t.context.pixiv.illustBookmarkDetail(), /illust_id required/);
-  await t.throws(t.context.pixiv.illustComments(), /illust_id required/);
-  await t.throws(t.context.pixiv.illustCommentsV2(), /illust_id required/);
+  await t.throws(t.context.pixiv.illustCommentsV3(), /illust_id required/);
   await t.throws(t.context.pixiv.illustRelated(), /illust_id required/);
   await t.throws(t.context.pixiv.illustDetail(), /illust_id required/);
   await t.throws(t.context.pixiv.illustAddComment(), /illust_id required/);
@@ -306,6 +315,7 @@ test('error if params missing', async t => {
   await t.throws(t.context.pixiv.novelBookmarkDetail(), /novel_id required/);
   await t.throws(t.context.pixiv.novelComments(), /novel_id required/);
   await t.throws(t.context.pixiv.novelCommentsV2(), /novel_id required/);
+  await t.throws(t.context.pixiv.novelCommentsV3(), /novel_id required/);
   await t.throws(t.context.pixiv.novelDetail(), /novel_id required/);
   await t.throws(t.context.pixiv.novelSeries(), /series_id required/);
   await t.throws(t.context.pixiv.novelWebview(), /novel_id required/);
@@ -327,5 +337,5 @@ test('error if params missing', async t => {
   await t.throws(t.context.pixiv.searchNovelPopularPreview(), /word required/);
   await t.throws(t.context.pixiv.searchNovelBookmarkRanges(), /word required/);
   await t.throws(t.context.pixiv.searchUser(), /word required/);
-  await t.throws(t.context.pixiv.searchAutoComplete(), /word required/);
+  await t.throws(t.context.pixiv.searchAutoCompleteV2(), /word required/);
 });

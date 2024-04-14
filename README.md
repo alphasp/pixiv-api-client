@@ -109,7 +109,7 @@ require auth
 
 - `word` - word to search (required)
 
-#### pixiv.searchAutoComplete(word)
+#### [Depcreated] pixiv.searchAutoComplete(word)
 require auth
 
 - `word` - word to search (required)
@@ -174,19 +174,32 @@ require auth
 - `id` - Pixiv novel id (required)
 - `options` - object (optional)
 
-#### pixiv.illustComments(id, options)
+
+#### [Deprecated] pixiv.illustComments(id, options)
 require auth
 
 - `id` - Pixiv illust id (required)
 - `options` - object (optional)
 
-#### pixiv.illustCommentsV2(id, options)
+#### [Deprecated] pixiv.illustCommentsV2(id, options)
+require auth
+
+- `id` - Pixiv illust id (required)
+- `options` - object (optional)
+
+#### pixiv.illustCommentsV3(id, options)
 require auth
 
 - `id` - Pixiv illust id (required)
 - `options` - object (optional)
 
 #### pixiv.illustCommentReplies(id, options)
+require auth
+
+- `id` - Pixiv illust comment id (required)
+- `options` - object (optional)
+
+#### pixiv.illustCommentRepliesV2(id, options)
 require auth
 
 - `id` - Pixiv illust comment id (required)
@@ -204,7 +217,19 @@ require auth
 - `id` - Pixiv novel id (required)
 - `options` - object (optional)
 
+#### pixiv.novelCommentsV3(id, options)
+require auth
+
+- `id` - Pixiv novel id (required)
+- `options` - object (optional)
+
 #### pixiv.novelCommentReplies(id, options)
+require auth
+
+- `id` - Pixiv novel comment id (required)
+- `options` - object (optional)
+
+#### pixiv.novelCommentRepliesV2(id, options)
 require auth
 
 - `id` - Pixiv novel comment id (required)
@@ -447,8 +472,7 @@ can be use to request pixiv endpoint or use for traversing results by passing ne
 Export pixiv username and password before running Tests.
 
 ```
-$ export USER_NAME=Pixiv username
-$ export PASSWORD=Pixiv password
+$ export refresh_token=pixiv account refresh_token
 $ npm test
 ```
 

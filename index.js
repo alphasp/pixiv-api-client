@@ -353,6 +353,7 @@ class PixivApi {
     return this.requestUrl(`/v1/search/user?${queryString}`);
   }
 
+  // deprecated
   searchAutoComplete(word) {
     if (!word) {
       return Promise.reject('word required');
@@ -503,24 +504,17 @@ class PixivApi {
     return this.requestUrl(`/v1/walkthrough/illusts`);
   }
 
+  // deprecated, use illustCommentsV3
   illustComments(id, options) {
-    if (!id) {
-      return Promise.reject(new Error('illust_id required'));
-    }
-
-    const queryString = qs.stringify(
-      Object.assign(
-        {
-          illust_id: id,
-          include_total_comments: true,
-        },
-        options
-      )
-    );
-    return this.requestUrl(`/v1/illust/comments?${queryString}`);
+    return this.illustCommentsV3(id, options);
   }
 
+  // deprecated, use illustCommentsV3
   illustCommentsV2(id, options) {
+    return this.illustCommentsV3(id, options);
+  }
+
+  illustCommentsV3(id, options) {
     if (!id) {
       return Promise.reject(new Error('illust_id required'));
     }
@@ -533,7 +527,7 @@ class PixivApi {
         options
       )
     );
-    return this.requestUrl(`/v2/illust/comments?${queryString}`);
+    return this.requestUrl(`/v3/illust/comments?${queryString}`);
   }
 
   illustCommentReplies(id) {
@@ -542,6 +536,14 @@ class PixivApi {
     }
     const queryString = qs.stringify({ comment_id: id });
     return this.requestUrl(`/v1/illust/comment/replies?${queryString}`);
+  }
+
+  illustCommentRepliesV2(id) {
+    if (!id) {
+      return Promise.reject(new Error('comment_id required'));
+    }
+    const queryString = qs.stringify({ comment_id: id });
+    return this.requestUrl(`/v2/illust/comment/replies?${queryString}`);
   }
 
   illustRelated(id, options) {
@@ -880,12 +882,36 @@ class PixivApi {
     return this.requestUrl(`/v2/novel/comments?${queryString}`);
   }
 
+  novelCommentsV3(id, options) {
+    if (!id) {
+      return Promise.reject(new Error('novel_id required'));
+    }
+
+    const queryString = qs.stringify(
+      Object.assign(
+        {
+          novel_id: id,
+        },
+        options
+      )
+    );
+    return this.requestUrl(`/v3/novel/comments?${queryString}`);
+  }
+
   novelCommentReplies(id) {
     if (!id) {
       return Promise.reject(new Error('comment_id required'));
     }
     const queryString = qs.stringify({ comment_id: id });
     return this.requestUrl(`/v1/novel/comment/replies?${queryString}`);
+  }
+
+  novelCommentRepliesV2(id) {
+    if (!id) {
+      return Promise.reject(new Error('comment_id required'));
+    }
+    const queryString = qs.stringify({ comment_id: id });
+    return this.requestUrl(`/v2/novel/comment/replies?${queryString}`);
   }
 
   novelSeries(id) {
