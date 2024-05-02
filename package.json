@@ -33,7 +33,7 @@
     "qs": "^6.2.1"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
+    "ava": "^5.1.0",
     "dotenv": "^4.0.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.2.0",
